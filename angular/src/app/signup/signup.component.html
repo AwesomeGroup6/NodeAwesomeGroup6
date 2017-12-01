@@ -1,0 +1,67 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="jumbotron">
+      <h2>Sign up</h2>
+      <form [formGroup]="signupForm" (ngSubmit)="signup()" novalidate>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="email" class="form-control" required formControlName="email" placeholder="Email">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="password" class="form-control"
+                   name="password" required id="password" formControlName="password"
+                   placeholder="Password">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="text" class="form-control"
+                   name="firstName" required id="firstName" formControlName="firstName"
+                   placeholder="First name">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="text" class="form-control"
+                   name="lastName" required id="lastName" formControlName="lastName"
+                   placeholder="Last name">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="number" class="form-control"
+                   name="phoneNumber" required id="phoneNumber" formControlName="phoneNumber"
+                   placeholder="Phone">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="date" class="form-control"
+                   name="dob" required id="dob" formControlName="dob"
+                   placeholder="Date of birth">
+          </mat-form-field>
+        </div>
+        <div class="form-group">
+          <mat-form-field>
+            <input matInput type="text" class="form-control"
+                   name="gender" required id="gender" formControlName="gender"
+                   placeholder="Gender">
+          </mat-form-field>
+        </div>
+
+        <div class="form-group">
+          <button mat-raised-button color="primary" type="submit">Sign up</button>
+        </div>
+      </form>
+      <p class="small">Already have an account? Log in <a routerLink="/login">here</a></p>
+
+      </div>
+
+    </div>
+  </div>
+</div>
