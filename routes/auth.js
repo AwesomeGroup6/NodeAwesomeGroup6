@@ -1,4 +1,4 @@
-const express = require('express');
+ const express = require('express');
 const router = express.Router();
 const db = require('../connect_database');
 
@@ -7,7 +7,7 @@ router.get('/', function(req, res, next) {
     res.send('You cant login 😱');
 });
 
-router.get('/home', function(req, res, next){
+router.post('/home', function(req, res, next){
     console.dir(req.user);
     res.status(200).send('auth fam');
 });

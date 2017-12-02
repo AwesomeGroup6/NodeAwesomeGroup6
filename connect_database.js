@@ -23,11 +23,9 @@ function getLogin(email, password) {
                 .input('Email', sql.VarChar(50), email)
                 .input('Password', sql.VarChar(50), password)
                 .execute('checkLogin')
-                pool.close();
           }).then(result => {
               console.dir(result.recordset[0].UserId);
               resolve(result.recordset[0].UserId);
-              result.close();
           }).catch(err => {
               // ... error checks
               console.dir(err);
@@ -50,7 +48,6 @@ function getLogin(email, password) {
                 .input('Password', sql.VarChar(50), Password)
                // .input('PhoneNumber', sql.VarChar(50), PhoneNumber)
                 .execute('signUpUser')
-                pool.close();
           }).then(result => {
               console.dir(result);
               console.log(result.rowsAffected[0]);
@@ -78,7 +75,6 @@ function getLogin(email, password) {
                 .input('UserId', sql.Int, UserId)
                 .input('postContent', sql.VarChar(100), postContent)
                 .execute('createPost')
-                pool.close();
           }).then(result => {
               console.dir(result);
               console.log(result.rowsAffected[0]);
@@ -106,7 +102,6 @@ console.log(err);
              return pool.request()
                 .input('Email', sql.VarChar(50), email)
                 .execute('getUserIdFromEmail')
-                pool.close();
           }).then(result => {
               console.dir(result.recordset[0].UserId);
               resolve(result.recordset[0].UserId);
@@ -135,7 +130,6 @@ console.log(err);
             return pool.request()
                .input('PostId', sql.Int, postId)
                .execute('deletePost')
-               pool.close();
          }).then(result => {
             console.log(result.rowsAffected[0]);
             resolve(result.rowsAffected[0]);
