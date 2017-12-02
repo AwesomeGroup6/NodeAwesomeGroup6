@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 let index = require('./routes/index');
 let users = require('./routes/users');
 let auth = require('./routes/auth');
-let home = require('./routes/home');
 let publicroutes = require('./routes/public');
 let secret = require('./config').secret;
 
