@@ -4,12 +4,22 @@ const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+
 
 let index = require('./routes/index');
 let users = require('./routes/users');
 let auth = require('./routes/auth');
+let publicroutes = require('./routes/public');
+let secret = require('./config').secret;
+let home = require('./routes/home');
 
 const app = express();
+
+/* making a session for the application, */
+app.use(cookieParser());
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -18,10 +28,34 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use('/', index);
-app.use('/users', users);
-app.use('/login', auth);
+
+app.use('/public', publicroutes);
+
+
+app.use(function(req, res, next){
+  if(req.headers && req.headers.authorization){
+
+    let token = req.headers.authorization.split(' ')[1];
+    console.log(token);
+    
+    jwt.verify(token, secret, function(err, decode){
+      if (err) res.status(401).send({text: 'User not identified'});
+      req.user = decode;
+
+
+      next();
+    });
+  }else {
+    res.status(401).send({text: 'No token provided'});
+}
+
+});
+
+app.use('/auth', auth);
+app.use('/home',home);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
