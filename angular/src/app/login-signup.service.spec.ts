@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { MediaServiceService } from './media-service.service';
+import { MediaServiceService } from './login-signup';
 
 describe('MediaServiceService', () => {
   beforeEach(() => {

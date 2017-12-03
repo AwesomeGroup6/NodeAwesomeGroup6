@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {FormControl, FormGroup} from "@angular/forms";
-import {MediaServiceService} from "../media-service.service";
+import {MediaServiceService} from "../login-signup";
+import {ToastsManager} from "ng2-toastr";
 
 @Component({
   selector: 'app-signup',
@@ -10,8 +11,9 @@ import {MediaServiceService} from "../media-service.service";
 export class SignupComponent {
   MService;
 
-  constructor( ms : MediaServiceService) {
+  constructor( ms : MediaServiceService, private toastr: ToastsManager, vcr: ViewContainerRef) {
     this.MService = ms;
+    this.toastr.setRootViewContainerRef(vcr);
   }
 
   signupForm = new FormGroup ({
@@ -27,9 +29,10 @@ export class SignupComponent {
 
   signup () {
     if (this.signupForm.controls.email.value || this.signupForm.controls.password.value) {
-      this.MService.logUserIn(this.signupForm.controls.email.value, this.signupForm.controls.password.value)
+      this.MService.signUserUp(this.signupForm.controls.email.value, this.signupForm.controls.password.value, this.signupForm.controls.firstName.value, this.signupForm.controls.lastName.value, this.signupForm.controls.phoneNumber.value, this.signupForm.controls.dob.value, this.signupForm.controls.gender.value)
+
     } else {
-      console.log('error')
+      this.toastr.error('Fill all the fields');
     }
   }
 }

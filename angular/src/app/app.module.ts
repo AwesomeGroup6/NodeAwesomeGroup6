@@ -1,13 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule, ViewContainerRef} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from "@angular/common/http";
 import { MatButtonModule } from "@angular/material";
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { MediaServiceService} from "./media-service.service";
-import { RouterModule, Routes } from '@angular/router';
+import { MediaServiceService} from "./login-signup";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
+import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
+import {MatCardModule} from '@angular/material/card';
 
 
 //IMPORT ANGULAR-MATERIAL COMPONENTS TO USE COMPONENTS TO USE
@@ -18,17 +19,15 @@ import { HomeComponent } from './home/home.component';
 import { FriendComponent } from './friend/friend.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { LoginComponent } from './login/login.component';
-import {User} from "./user";
+import {routing} from "../Routing";
+import {AuthGuard} from "./auth-guard.service";
 
+export class CustomOption extends ToastOptions {
+  showCloseButton = true;
+  dismiss: 'click';
+  animate: 'flyRight';
+}
 
-const appRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent},
-  { path: 'home', component: HomeComponent },
-  { path: 'friend', component: FriendComponent},
-  {path: '**', redirectTo: '/login', pathMatch: 'full'},
-
-];
 
 @NgModule({
   declarations: [
@@ -45,15 +44,15 @@ const appRoutes: Routes = [
     HttpClientModule,
     MatButtonModule,
     ReactiveFormsModule,
+    ToastModule.forRoot(),
+    MatCardModule,
     FormsModule,
     MatInputModule,
-    MatFormFieldModule,
-    RouterModule.forRoot(
-      appRoutes,
-      { enableTracing: false } // <-- debugging purposes only
-    ),
+    routing,
+    MatFormFieldModule
   ],
-  providers: [MediaServiceService],
+  providers: [MediaServiceService, AuthGuard, {provide: ToastOptions, useClass: CustomOption}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+

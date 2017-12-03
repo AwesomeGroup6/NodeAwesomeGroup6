@@ -1,9 +1,6 @@
 <!--The content below is only a placeholder and can be replaced.-->
-
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="jumbotron">
+<div class="example-container">
+<mat-card>
       <h2>Login</h2>
       <form [formGroup]="loginForm" (ngSubmit)="login()" novalidate>
         <div class="form-group">
@@ -23,12 +20,7 @@
         </div>
       </form>
       <p class="small">Don't have an account yet? Sign up <a routerLink="/signup">here</a></p>
+</mat-card>
 
-
-      </div>
-    </div>
-  </div>
 </div>
-
-
 
