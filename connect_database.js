@@ -9,7 +9,6 @@ let pool = new sql.ConnectionPool({
     }
 });
 
-
 // function which gets a login from an email
 function getLogin(email, password) {
     //let emailTest = 'rlgqpxt.kdnni@jnom.org';
@@ -26,7 +25,8 @@ function getLogin(email, password) {
           }).then(result => {
               console.dir(result.recordset[0].UserId);
               resolve(result.recordset[0].UserId);
-          }).catch(err => {
+              pool.close()
+        }).catch(err => {
               // ... error checks
               console.dir(err);
               reject(err);
@@ -52,7 +52,8 @@ function getLogin(email, password) {
               console.dir(result);
               console.log(result.rowsAffected[0]);
               resolve(result.rowsAffected[0]);
-          }).catch(err => {
+              pool.close()
+        }).catch(err => {
               // ... error checks
               console.dir(err);
               reject(err);
@@ -79,7 +80,9 @@ function getLogin(email, password) {
               console.dir(result);
               console.log(result.rowsAffected[0]);
               resolve(result.rowsAffected[0]);
-             // sql.close();
+            pool.close()
+
+            // sql.close();
           }).catch(err => {
               // ... error checks
               console.dir(err);
@@ -105,7 +108,9 @@ console.log(err);
           }).then(result => {
               console.dir(result.recordset[0].UserId);
               resolve(result.recordset[0].UserId);
-              //sql.close();
+            pool.close()
+
+            //sql.close();
           }).catch(err => {
               // ... error checks
               console.dir(err);
@@ -133,7 +138,9 @@ console.log(err);
          }).then(result => {
             console.log(result.rowsAffected[0]);
             resolve(result.rowsAffected[0]);
-             //sql.close();
+           pool.close()
+
+           //sql.close();
          }).catch(err => {
              // ... error checks
              console.dir(err);
@@ -143,18 +150,84 @@ console.log(err);
      
 }
 
+function getFriendsPost(UserId){
+    return new Promise((resolve, reject) =>
+    {
+        pool.close();
+
+        pool.connect().then(pool => {
+            console.log('before request');
+            return pool.request()
+                .input('UserId', sql.Int(50), UserId)
+                .execute('displayFriendsPosts')
+        }).then(result => {
+            resolve(result.recordset);
+            pool.close()
+
+        }).catch(err => {
+            reject(err);
+        })
+    });
+
+};
+
+
+function getFriends(UserId){
+
+    return new Promise((resolve, reject) =>
+    {
+        pool.close();
+        pool.connect().then(pool => {
+            return pool.request()
+                .input('UserId', sql.Int(50), UserId)
+                .execute('getFriends')
+        }).then(result => {
+            resolve(result.recordset);
+            pool.close()
+
+            pool.close()
+        }).catch(err => {
+            reject(err);
+        })
+    });
+
+};
+
+function getGroupsUserIsPartOf(UserId){
+    return new Promise((resolve, reject) =>
+    {
+        pool.close();
+        pool.connect().then(pool => {
+            console.log('before request');
+            return pool.request()
+                .input('userId', sql.Int(50), UserId)
+                .execute('displayGroupsIPartOf')
+        }).then(result => {
+            resolve(result.recordset);
+            pool.close()
+        }).catch(err => {
+            reject(err);
+        })
+    });
+
+};
+
+
 sql.on('error', err => {
     console.log(err)
 })
- 
- 
- 
+
+
+
  module.exports = {
      connection: getLogin,
      addaccount: saveAccount,
      addpost: savePost,
      getidfromemail: getUserIdFromEmail,
-     deletePost: deletePost
+     deletePost: deletePost,
+     getFriendsPost :getFriendsPost,
+     getFriends: getFriends,
+     getGroupsUserIsPartOf : getGroupsUserIsPartOf
  };
  
 

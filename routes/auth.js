@@ -51,8 +51,6 @@ router.post('/createpost', function(req, res, next){
         
         });
 
-        
-            
             let dbAccount = db.addpost(userId, req.body.postContent);
                 dbAccount.then(result => {
                     console.log(result);

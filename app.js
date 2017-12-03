@@ -12,6 +12,7 @@ let users = require('./routes/users');
 let auth = require('./routes/auth');
 let publicroutes = require('./routes/public');
 let secret = require('./config').secret;
+let home = require('./routes/home');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 
 app.use('/public', publicroutes);
+
 
 app.use(function(req, res, next){
   if(req.headers && req.headers.authorization){
@@ -48,7 +50,7 @@ app.use(function(req, res, next){
 });
 
 app.use('/auth', auth);
-
+app.use('/home',home);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
