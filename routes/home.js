@@ -51,8 +51,9 @@ router.get('/friends', function(req, res, next) {
 
 router.get('/posts', function(req, res, next) {
 
-    let email = req.user.email;
 
+    let email = req.user.email;
+    console.log(email);
     let dbUserId = db.getidfromemail(email);
 
     dbUserId.then(userId => {
@@ -62,27 +63,34 @@ router.get('/posts', function(req, res, next) {
 
         let result = db.getFriendsPost(userId);
 
-        result.then(friendsPosts => {
+        result.then(posts => {
 
-        res.status(200).json({
-            friendsPosts
+            res.status(200).json({
+                posts
+            });
+
+        }).catch(err => {
+            res.status(500).send({
+                text: 'An error occured. Try again'
+            });
+            console.log(err)
+
         });
+
 
     }).catch(err => {
-        res.status(500).send({
-            text: 'An error occured. Try again'
-        });
+        res.status(500).send({text: 'An error occured. Try again'});
         console.log(err)
-    });
 
     });
+
 
 });
 
 router.get('/groups', function(req, res, next) {
 
     let email = req.user.email;
-
+    console.log(email);
     let dbUserId = db.getidfromemail(email);
 
     dbUserId.then(userId => {
@@ -90,22 +98,54 @@ router.get('/groups', function(req, res, next) {
         console.log(userId);
         userId = userId;
 
-    let result = db.getGroupsUserIsPartOf(userId);
+        let result = db.getGroupsUserIsPartOf(userId);
 
-    result.then(groups => {
+        result.then(groups => {
 
-        res.status(200).json({
-            groups
+            res.status(200).json({
+                groups
+            });
+
+        }).catch(err => {
+            res.status(500).send({
+                text: 'An error occured. Try again'
+            });
+            console.log(err)
+
         });
+
 
     }).catch(err => {
-        res.status(500).send({
-            text: 'An error occured. Try again'
-        });
+        res.status(500).send({text: 'An error occured. Try again'});
         console.log(err)
 
     });
-    
+});
+
+router.post('/findFriend',function (req,res,next) {
+
+    console.log("hi");
+
+    let FirstName = req.body.FirstName;
+    let LastName = req.body.LastName;
+
+    let friend = db.findFriends(FirstName,LastName);
+
+    friend.then(result => {
+        console.log(result);
+
+    res.status(200).json({
+        result
+    });
+
+}).catch(err => {
+            res.status(500).send({text: 'An error occured. Try again'});
+            console.log(err);
+
+    }).catch(err => {
+        res.status(500).send({text: 'An error occured. Try again'});
+        console.log(err)
+
     });
 
 });

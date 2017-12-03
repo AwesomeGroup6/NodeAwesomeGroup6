@@ -7,11 +7,6 @@ router.get('/', function(req, res, next) {
     res.send('You cant login 😱');
 });
 
-router.post('/home', function(req, res, next){
-    console.dir(req.user);
-    res.status(200).send('auth fam');
-});
-
 router.get('/view/post', function(req, res, next){
     console.dir(req.user);
     res.status(200).send('auth fam');
@@ -35,36 +30,37 @@ router.get('/view/friendrequest', function(req, res, next){
 // this is a post request which will add a post to the database.
 router.post('/createpost', function(req, res, next){
     
-    console.log(req.user.email);
     let email = req.user.email;
     let userId = 0;
     let dbUserId = db.getidfromemail(email);
     
-        dbPassword.then(result => {
+        dbUserId.then(result => {
 
             console.log(result);
             userId = result;
-            result.close();
+
+            let dbAccount = db.addpost(userId, req.body.PostContent);
+            dbAccount.then(result => {
+                console.log(result);
+                if(result = 1) {
+                    res.status(200).send({text: 'all was done'});
+
+                }else {
+                    res.status(500);
+                }
+            }).catch(err => {
+                res.sendStatus(500).send({text: 'An error occured. Try again'});
+                console.log(err)
+
+            });
+
         }).catch(err => {
             res.status(500).send({text: 'An error occured. Try again'});
             console.log(err)
         
         });
 
-            let dbAccount = db.addpost(userId, req.body.postContent);
-                dbAccount.then(result => {
-                    console.log(result);
-                    if(result = 1) {
-                    res.status(200).send({text: 'all was done'});
-                    
-                    }else {
-                        res.status(500);
-                    }
-                }).catch(err => {
-                    res.sendStatus(500).send({text: 'An error occured. Try again'});
-                    console.log(err)
-                
-                });
+
             
 
 

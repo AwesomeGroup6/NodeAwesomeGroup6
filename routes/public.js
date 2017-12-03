@@ -13,9 +13,8 @@ router.get('/', function(req, res, next) {
 
 
 router.post('/login', function(req, res, next) {
-    
-   
-   // Method which checks if a login and password is and fits in the database. and will responds with with whatever case. 
+
+    // Method which checks if a login and password is and fits in the database. and will responds with with whatever case.
         let email = req.body.email;
         let password = req.body.password;
         console.log(email, password)
@@ -27,6 +26,7 @@ router.post('/login', function(req, res, next) {
             if(!isNaN(result)){
                 
                 console.log(result.UserId);
+
                 const payload = {
                     email: req.body.email
                 };

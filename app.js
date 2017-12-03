@@ -41,6 +41,8 @@ app.use(function(req, res, next){
     jwt.verify(token, secret, function(err, decode){
       if (err) res.status(401).send({text: 'User not identified'});
       req.user = decode;
+
+
       next();
     });
   }else {

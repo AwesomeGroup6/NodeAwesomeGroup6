@@ -66,7 +66,7 @@ function getLogin(email, password) {
 
  }
 
- function savePost(UserId, postContent) {
+ function savePost(UserId, PostContent) {
     try {
     return new Promise((resolve, reject) =>
     {
@@ -74,13 +74,13 @@ function getLogin(email, password) {
             console.log('before request');
              return pool.request()
                 .input('UserId', sql.Int, UserId)
-                .input('postContent', sql.VarChar(100), postContent)
+                .input('PostContent', sql.VarChar(100), PostContent)
                 .execute('createPost')
           }).then(result => {
               console.dir(result);
               console.log(result.rowsAffected[0]);
               resolve(result.rowsAffected[0]);
-            pool.close()
+             pool.close()
 
             // sql.close();
           }).catch(err => {
@@ -196,7 +196,6 @@ function getFriends(UserId){
 function getGroupsUserIsPartOf(UserId){
     return new Promise((resolve, reject) =>
     {
-        pool.close();
         pool.connect().then(pool => {
             console.log('before request');
             return pool.request()
@@ -213,6 +212,29 @@ function getGroupsUserIsPartOf(UserId){
 };
 
 
+function findFriends(FirstName,LastName) {
+
+    return new Promise((resolve,reject) =>
+
+    {
+        pool.connect().then(pool => {
+            return pool.request()
+            .input("FirstName",sql.VarChar(50),FirstName)
+                .input("LastName",sql.VarChar(50),LastName)
+                .execute('findFriend')
+        }).then(result => {
+            resolve(result.recordset);
+            pool.close();
+        }).catch(err => {
+            reject(err);
+        });
+
+
+    });
+
+}
+
+
 sql.on('error', err => {
     console.log(err)
 })
@@ -227,7 +249,8 @@ sql.on('error', err => {
      deletePost: deletePost,
      getFriendsPost :getFriendsPost,
      getFriends: getFriends,
-     getGroupsUserIsPartOf : getGroupsUserIsPartOf
+     getGroupsUserIsPartOf : getGroupsUserIsPartOf,
+     findFriends:findFriends
  };
  
 
