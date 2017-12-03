@@ -7,6 +7,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig(), http, options);
 }
 
+
 @NgModule({
   providers: [
     {

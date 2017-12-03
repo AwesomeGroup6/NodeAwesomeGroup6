@@ -6,16 +6,11 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {Router} from "@angular/router";
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
-
 @Injectable()
 export class MediaServiceService {
 
 
   private testUrl = 'http://localhost:3000/';
-  private currentUser;
 
 
 
@@ -28,12 +23,12 @@ export class MediaServiceService {
       .subscribe(
         // Successful responses call the first callback.
         data => {
-          this.currentUser = { 'email': data['email'],
-            'token':data['token']};
-          if(this.currentUser) {
-            localStorage.setItem('currentUser', this.currentUser );
-          }
-          this.router.navigate(['home']);
+            let token = data['token'];
+            localStorage.setItem('token', token );
+
+            if(data['success']) {
+              this.router.navigate(['home']);
+            }
           console.log(data);
         },
         // Errors will call this callback instead:
