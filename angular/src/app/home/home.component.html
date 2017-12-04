@@ -1,7 +1,25 @@
 <div class="row" style="margin-top: 10px">
   <div class="col-6 col-md-4">
     <mat-card>
-    <h6>Friends and Friend requests</h6>
+      <h6>Friends</h6>
+      <hr>
+      <mat-list *ngFor="let friend of currFriends | async; let i=index">
+        <mat-list-item>{{friend.FirstName}} {{friend.LastName}} </mat-list-item>
+        <hr>
+      </mat-list>
+    </mat-card>
+
+    <mat-card style="margin-top: 5px">
+      <h6>Friend Requests</h6>
+      <hr>
+      <mat-list *ngFor="let friend of fRQs | async; let i=index">
+        <mat-list-item>{{friend.FirstName}} {{friend.LastName}} </mat-list-item>
+        <mat-card-actions style="margin-left: 5px">
+          <button mat-raised-button color="primary" (click)="acceptFR(friend.UserId)">Accept</button>
+          <button mat-raised-button color="accent" (click)="declineFR(friend.UserId)">Decline</button>
+        </mat-card-actions>
+        <hr>
+      </mat-list>
     </mat-card>
     <mat-card style="margin-top: 5px">
       <form [formGroup]="searchForm" (keydown)="findFriends($event)" novalidate>
@@ -12,6 +30,7 @@
           </mat-form-field>
         </div>
       </form>
+      <hr>
       <mat-list *ngFor="let friend of friends | async; let i=index">
         <mat-list-item>Name: {{friend.FirstName}} {{friend.LastName}} </mat-list-item>
         <mat-list-item>Email: {{friend.Email}}</mat-list-item>
@@ -51,7 +70,11 @@
           {{post.PostContent}}
         </p>
         </mat-list-item>
-
+        <mat-list-item>
+          <mat-card-actions style="margin-left: 5px">
+            <button mat-raised-button color="accent">Like</button>
+          </mat-card-actions>
+        </mat-list-item>
        <mat-list-item style="margin-top: 10px;">
         <form [formGroup]="commentForm" (keydown)="createComment($event)" novalidate>
             <mat-form-field>
@@ -68,15 +91,47 @@
 
   <div class="col-6 col-md-4">
     <mat-card>
-      <h5>Available groups</h5>
-
+      <h5>Profile</h5>
+      <button mat-raised-button type="button" (click)="logout()">Logout</button>
     </mat-card>
 
     <mat-card style="margin-top: 10px">
-      <h5>Profile</h5>
+      <h6>Available groups</h6>
+      <hr>
+      <mat-list *ngFor="let group of groups | async" style="margin-top: 10px">
+          <mat-list-item>
+            <h6>Title: {{group.title}}</h6>
+          </mat-list-item>
+          <mat-list-item><p style="font-size: 10px">
+            {{group.DESCRIPTION}}
+            </p>
+          </mat-list-item>
+        <hr>
+      </mat-list>
+    </mat-card>
 
-
-      <button mat-raised-button type="button" (click)="logout()">Logout</button>
+    <mat-card style="margin-top: 10px">
+      <form [formGroup]="groupForm" (keydown)="findGroup($event)" novalidate>
+        <div class="form-group">
+          <h6>Find groups</h6>
+          <mat-form-field>
+            <input matInput type="text" class="form-control" required formControlName="name" placeholder="Name">
+          </mat-form-field>
+        </div>
+      </form>
+      <hr>
+      <mat-list *ngFor="let group of findGs | async">
+        <mat-list-item>Title: {{group.title}}</mat-list-item>
+        <mat-list-item>
+          <p style="font-size: 10px">
+          {{group.description}}
+          </p>
+        </mat-list-item>
+        <mat-list-item style="margin-top: 20px">
+          <button mat-raised-button (click)="joinGroup(group.groupId)">Join</button>
+      </mat-list-item>
+        <hr>
+      </mat-list>
     </mat-card>
 
   </div>

@@ -21,7 +21,6 @@ import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { LoginComponent } from './login/login.component';
 import {routing} from "../Routing";
 import {AuthGuard} from "./auth-guard.service";
-import {Http, RequestOptions} from "@angular/http";
 import {AuthGateService} from "./auth-gate.service";
 
 export class CustomOption extends ToastOptions {

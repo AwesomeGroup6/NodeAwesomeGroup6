@@ -11,3 +11,15 @@
 .example-container > * {
   width: 100%;
 }
+
+hr{
+  display: block;
+  unicode-bidi: isolate;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
+  -webkit-margin-start: auto;
+  -webkit-margin-end: auto;
+  overflow: hidden;
+  border-style: inset;
+  border-width: 1px;
+}

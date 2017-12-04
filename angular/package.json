@@ -27,7 +27,8 @@
     "core-js": "^2.4.1",
     "ng2-toastr": "^4.1.2",
     "rxjs": "^5.5.2",
-    "zone.js": "^0.8.14"
+    "zone.js": "^0.8.14",
+    "q": "latest"
   },
   "devDependencies": {
     "@angular/cli": "1.5.4",

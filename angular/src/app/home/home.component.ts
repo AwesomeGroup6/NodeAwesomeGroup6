@@ -4,6 +4,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {ToastsManager} from "ng2-toastr";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
+import {async} from 'rxjs/scheduler/async';
 
 
 @Component({
@@ -16,7 +17,10 @@ export class HomeComponent implements OnInit {
 
   friends: Observable<any[]>;
   posts: Observable<any[]>;
-
+  groups: Observable<any[]>;
+  currFriends: Observable<any[]>;
+  fRQs: Observable<any>;
+  findGs: Observable<any>;
 
   constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router) {
     this.agS = agService;
@@ -35,16 +39,27 @@ export class HomeComponent implements OnInit {
     content: new FormControl(),
   });
 
+  groupForm = new FormGroup ({
+    name: new FormControl(),
+  });
 
   ngOnInit() {
-    //this.agS.getFriends();
+    this.currFriends = this.agS.getFriends();
+    setTimeout(() => {
     this.posts = this.agS.getPosts();
-    //this.agS.getGroups();
+    }, 1000);
+    setTimeout(() => {
+    this.groups = this.agS.getGroups();
+    }, 2000);
+    setTimeout(() => {
+      this.fRQs = this.agS.getFRs();
+    }, 3000);
   }
 
   createPost() {
     if(this.postForm.controls.content.value){
       this.agS.createPost(this.postForm.controls.content.value);
+      this.toastr.success('', 'Post submitted');
     }else {
 
     }
@@ -67,8 +82,25 @@ export class HomeComponent implements OnInit {
 
 
   sendFriendReq(FriendUserId){
-    //TODO
-    console.log(FriendUserId)
+    this.agS.makeFR(FriendUserId);
+  }
+
+  acceptFR(FriendUserId){
+    this.agS.acceptFR(FriendUserId);
+  }
+
+  declineFR(FriendUserId){
+    this.agS.declineFR(FriendUserId);
+  }
+
+  findGroup(event){
+    if(event.keyCode == 13) {
+      this.findGs =  this.agS.findGroups(this.groupForm.controls.name.value);
+    }
+  }
+
+  joinGroup(gId){
+    console.log(gId);
   }
 
   logout(){
