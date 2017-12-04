@@ -1,3 +1,62 @@
-<p>
-  home works!
-</p>
+<div class="row" style="margin-top: 10px">
+  <div class="col-6 col-md-4">
+    <mat-card>
+    <h6>Friends and Friend requests</h6>
+    </mat-card>
+    <mat-card style="margin-top: 5px">
+      <form [formGroup]="searchForm" (keydown)="findFriends($event)" novalidate>
+        <div class="form-group">
+          <h6>Friend finder</h6>
+          <mat-form-field>
+            <input matInput type="text" class="form-control" required formControlName="name" placeholder="Name">
+          </mat-form-field>
+        </div>
+      </form>
+      <mat-list *ngFor="let friend of friends | async; let i=index">
+        <mat-list-item>Name: {{friend.FirstName}} {{friend.LastName}} </mat-list-item>
+        <mat-list-item>Email: {{friend.Email}}</mat-list-item>
+        <mat-list-item>Gender: {{friend.Gender}} </mat-list-item>
+        <button mat-raised-button type="button" (click)="sendFriendReq(friend.UserId)">Send Friend Request</button>
+        <hr>
+      </mat-list>
+    </mat-card>
+
+  </div>
+  <div class="col-6 col-md-4">
+  <mat-card>
+    <h5>Create post</h5>
+    <p>What's on your mind?</p>
+    <form [formGroup]="postForm" (ngSubmit)="createPost()" novalidate>
+      <div class="form-group">
+        <mat-form-field>
+          <input matInput type="text" class="form-control" required formControlName="content" placeholder="Content">
+        </mat-form-field>
+      </div>
+      <div class="form-group">
+        <button mat-raised-button color="primary" type="submit">Submit</button>
+      </div>
+    </form>
+  </mat-card>
+
+    <!-- POSTS -->
+    <mat-list *ngFor="let post of posts | async">
+      <mat-card>
+        <mat-list-item>{{post}}</mat-list-item>
+      </mat-card>
+    </mat-list>
+
+  </div>
+
+  <div class="col-6 col-md-4">
+    <mat-card>
+      <h5>Available groups</h5>
+
+    </mat-card>
+
+    <mat-card style="margin-top: 10px">
+      <h5>Profile</h5>
+
+    </mat-card>
+
+  </div>
+</div>

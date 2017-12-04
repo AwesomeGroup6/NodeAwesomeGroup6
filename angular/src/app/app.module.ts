@@ -9,7 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 import {MatCardModule} from '@angular/material/card';
-
+import {MatListModule} from '@angular/material/list';
 
 //IMPORT ANGULAR-MATERIAL COMPONENTS TO USE COMPONENTS TO USE
 
@@ -22,20 +22,12 @@ import { LoginComponent } from './login/login.component';
 import {routing} from "../Routing";
 import {AuthGuard} from "./auth-guard.service";
 import {Http, RequestOptions} from "@angular/http";
-import {AuthConfig, AuthHttp} from "angular2-jwt";
+import {AuthGateService} from "./auth-gate.service";
 
 export class CustomOption extends ToastOptions {
   showCloseButton = true;
   dismiss: 'click';
   animate: 'flyRight';
-}
-
-export function authHttpServiceFactory(http: Http, options: RequestOptions) {
-  return new AuthHttp(new AuthConfig({
-    tokenName: 'token',
-    tokenGetter: (() => sessionStorage.getItem('token')),
-    globalHeaders: [{'Content-Type':'application/json'}],
-  }), http, options);
 }
 
 
@@ -57,11 +49,12 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     ToastModule.forRoot(),
     MatCardModule,
     FormsModule,
+    MatListModule,
     MatInputModule,
     routing,
     MatFormFieldModule
   ],
-  providers: [MediaServiceService, AuthGuard, {provide: ToastOptions, useClass: CustomOption}],
+  providers: [MediaServiceService, AuthGuard, {provide: ToastOptions, useClass: CustomOption}, AuthGateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -25,7 +25,7 @@ export class MediaServiceService {
         data => {
             let token = data['token'];
             localStorage.setItem('token', token );
-
+            localStorage.setItem('email', email);
             if(data['success']) {
               this.router.navigate(['home']);
             }
