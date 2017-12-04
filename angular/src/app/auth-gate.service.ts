@@ -42,8 +42,8 @@ export class AuthGateService{
       headers: new HttpHeaders().set('Authorization', 'Bearer '+ localStorage.getItem('token'))
     },)
       .subscribe(data =>{
-        this.posts = data['result'];
-        console.log(data);
+        this.posts = data['posts'];
+        console.log(data, data['posts']);
         resolve(this.posts);
 
       }, error =>{

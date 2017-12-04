@@ -3,6 +3,7 @@ import {AuthGateService} from "../auth-gate.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {ToastsManager} from "ng2-toastr";
 import {Observable} from "rxjs/Observable";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit {
   posts: Observable<any[]>;
 
 
-  constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef) {
+  constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router) {
     this.agS = agService;
     this.toastr.setRootViewContainerRef(vcr);
   }
@@ -30,6 +31,9 @@ export class HomeComponent implements OnInit {
     name: new FormControl(),
   });
 
+  commentForm = new FormGroup ({
+    content: new FormControl(),
+  });
 
 
   ngOnInit() {
@@ -46,6 +50,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  createComment(event) {
+    if(event.keyCode == 13) {
+      if (this.postForm.controls.content.value) {
+        this.agS.createPost(this.postForm.controls.content.value);
+      } else {
+
+      }
+    }
+  }
    findFriends(event){
     if(event.keyCode == 13) {
      this.friends =  this.agS.findFriends(this.searchForm.controls.name.value);
@@ -56,5 +69,10 @@ export class HomeComponent implements OnInit {
   sendFriendReq(FriendUserId){
     //TODO
     console.log(FriendUserId)
+  }
+
+  logout(){
+    localStorage.clear();
+    this.router.navigate(['login']);
   }
 }
