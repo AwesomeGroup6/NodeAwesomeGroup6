@@ -55,4 +55,26 @@ router.post('/deletecomment', function(req, res, next){
 
 });
 
+
+
+router.post('/', function(req, res, next){
+
+    let comment = db.getComments(req.body.PostId);
+
+    comment.then(comments => {
+
+        res.status(200).json({
+            comments
+        });
+
+    }).catch(err => {
+        res.status(500).send({
+            text: 'An error occured. Try again'
+        });
+        console.log(err)
+
+    });
+
+});
+
 module.exports = router;

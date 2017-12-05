@@ -176,6 +176,7 @@ console.log(err);
 }
 
 function getFriendsPost(UserId){
+
     return new Promise((resolve, reject) =>
     {
         pool.close();
@@ -391,6 +392,81 @@ function addcomment(PostId,UserId,CommentText) {
      }
 
 
+function receiveFriendRequest(UserId){
+    return new Promise((resolve, reject) =>
+    {
+        console.log('before connect')
+
+        pool.connect().then(pool => {
+            console.log('before request');
+            return pool.request()
+                .input('UserId', sql.Int, UserId)
+                .execute('getFriendrequest1')
+        }).then(result => {
+            resolve(result.recordset);
+            pool.close()
+
+            //sql.close();
+        }).catch(err => {
+            // ... error checks
+            console.dir(err);
+            reject(err);
+        })
+    });
+
+}
+
+
+function revokeFriendship(UserId,FriendId){
+
+    return new Promise((resolve, reject) =>
+    {
+        console.log('before connect')
+
+        pool.connect().then(pool => {
+            console.log('before request');
+            return pool.request()
+                .input('UserId', sql.Int, UserId)
+                .input('FriendId', sql.Int, FriendId)
+                .execute('revokeFriendship')
+        }).then(result => {
+            console.log(result.rowsAffected[0]);
+            resolve(result.rowsAffected[0]);
+            pool.close()
+        }).catch(err => {
+            // ... error checks
+            console.dir(err);
+            reject(err);
+        })
+    });
+
+}
+
+
+function getComments(PostId){
+
+    return new Promise((resolve, reject) =>
+    {
+        console.log('before connect')
+
+        pool.connect().then(pool => {
+            console.log('before request');
+            return pool.request()
+                .input('PostId', sql.Int, PostId)
+                .execute('getComments')
+        }).then(result => {
+            console.log(result.recordset);
+            resolve(result.recordset);
+            pool.close()
+            pool.close()
+        }).catch(err => {
+            // ... error checks
+            console.dir(err);
+            reject(err);
+        })
+    });
+
+}
 sql.on('error', err => {
     console.log(err)
 })
@@ -412,7 +488,11 @@ sql.on('error', err => {
      joinGroup:joinGroup,
      requestFriendship: requestFriendship,
      addcomment: addcomment,
-     deleteComment: deleteComment
+     deleteComment: deleteComment,
+     receiveFriendRequest:receiveFriendRequest,
+     revokeFriendship:revokeFriendship,
+     getComments:getComments
+
 
  };
  

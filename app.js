@@ -15,6 +15,8 @@ let friends = require('./routes/friends');
 let groups = require('./routes/groups');
 let posts = require('./routes/posts');
 let comments = require('./routes/comments');
+let friendshipRequest = require('./routes/friendshipRequest');
+
 
 
 const app = express();
@@ -58,6 +60,8 @@ app.use('/friends',friends);
 app.use('/groups',groups);
 app.use('/posts',posts);
 app.use('/comments',comments);
+app.use('/friendshipRequest',friendshipRequest);
+
 
 
 // catch 404 and forward to error handler

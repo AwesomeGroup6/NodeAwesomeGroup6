@@ -58,29 +58,6 @@ router.post('/findFriend',function (req,res,next) {
 
 });
 
-router.post('/createfriendrequest', function(req, res, next){
 
-    let friendId = req.body.UserId;
-
-    console.log(friendId);
-
-    let dbAccount = db.requestFriendship(req.user.id,friendId);
-
-        dbAccount.then(result => {
-                console.log(result);
-                if(result = 1) {
-                    res.status(200).send({request: 'friend request has been inserted into the database'});
-
-                }else {
-                    res.send({update: 'database has been updated, no data has been inserted, look into the stored procedure: requestfriendship'
-                    });
-                }
-            }).catch(err => {
-                res.sendStatus(500).send({text: 'An error occured. Try again'});
-                console.log(err)
-
-            });
-
-});
 
 module.exports = router;
