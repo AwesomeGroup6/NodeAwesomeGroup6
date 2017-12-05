@@ -18,7 +18,6 @@ let comments = require('./routes/comments');
 let friendshipRequest = require('./routes/friendshipRequest');
 
 
-
 const app = express();
 
 /* making a session for the application, */

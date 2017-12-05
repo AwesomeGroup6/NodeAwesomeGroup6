@@ -347,7 +347,7 @@ function addcomment(PostId,UserId,CommentText) {
                 return pool.request()
                     .input('PostId', sql.Int, PostId)
                     .input('UserId', sql.Int, UserId)
-                    .input('CommentText',sql.VarChar(50))
+                    .input('CommentText',sql.VarChar(100),CommentText)
                     .execute('createComment')
             }).then(result => {
                 resolve(result.rowsAffected[0]);

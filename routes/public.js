@@ -4,7 +4,7 @@ const db = require('../connect_database');
 const jwt = require('jsonwebtoken');
 const sql = require('mssql')
 const secret = require('../config').secret;
-const bcrypt = require('bcrypt');
+
 /* for all the non */
 
 
@@ -81,7 +81,8 @@ router.post('/signup', function(req, res){
 
        
     });
-   
- 
+
+
+
 
 module.exports = router;

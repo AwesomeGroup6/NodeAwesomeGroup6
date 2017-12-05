@@ -16,6 +16,8 @@ router.post('/createcomment', function(req, res, next){
 
         let dbAccount = db.addcomment(req.body.PostId, req.user.id, req.body.CommentText);
 
+        console.log(req.body.CommentText);
+
         dbAccount.then(result => {
 
             console.log(result);
