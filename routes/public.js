@@ -4,9 +4,7 @@ const db = require('../connect_database');
 const jwt = require('jsonwebtoken');
 const sql = require('mssql')
 const secret = require('../config').secret;
-
 /* for all the non */
-
 
 
 router.post('/login', function(req, res, next) {
@@ -22,11 +20,11 @@ router.post('/login', function(req, res, next) {
 
     dbPassword.then(result => {
 
-        if(!isNaN(result)){
-
+            console.log("hi");
+            console.log(result.UserId);
 
             const payload = {
-                id: result
+                id: result.UserId
             };
             var token = jwt.sign(payload, secret, {
                 expiresIn: 1440 // expires in 24 hours
@@ -40,9 +38,6 @@ router.post('/login', function(req, res, next) {
             });
 
 
-        }else {
-            res.status(401);
-        }
 
     }).catch(err => {
         res.status(500).send({text: 'An error occured. Try again'});
@@ -55,6 +50,7 @@ router.post('/login', function(req, res, next) {
 });
 
 
+
 router.post('/signup', function(req, res){
 
     if(!req.body.Email || !req.body.Password || !req.body.FirstName || !req.body.LastName){
@@ -63,8 +59,14 @@ router.post('/signup', function(req, res){
        
     } else {
 
+
+
         console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
         let dbAccount = db.addaccount(req.body.Email, req.body.Password, req.body.FirstName, req.body.LastName);
+
+
+        console.log("hi" + a);
+
             dbAccount.then(result => {
                 console.log(result);
                 if(result = 1) {

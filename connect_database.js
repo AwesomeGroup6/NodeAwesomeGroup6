@@ -1,4 +1,7 @@
-const sql = require('mssql')
+const sql = require('mssql');
+const bcrypt = require('bcrypt');
+const salt = bcrypt.genSaltSync();
+
 let pool = new sql.ConnectionPool({
     user: 'Lucia',
     password: 'Klucinka007',
@@ -14,18 +17,31 @@ function getLogin(email, password) {
     //let emailTest = 'rlgqpxt.kdnni@jnom.org';
     return new Promise((resolve, reject) =>
     {
-        console.log('before connect')
+        console.log('before connect');
 
         pool.connect().then(pool => {
             console.log('before request');
             return pool.request()
                 .input('Email', sql.VarChar(50), email)
-                .input('Password', sql.VarChar(50), password)
-                .execute('checkLogin')
+                .execute('checkLogin1')
         }).then(result => {
-            console.dir(result.recordset[0].UserId);
-            resolve(result.recordset[0].UserId);
-            pool.close()
+
+            const a = password;
+            let hash = result.recordset[0].Password;
+
+            console.log(bcrypt.compareSync(a,hash));
+
+            console.log("hash" + result.recordset[0].Password);
+            console.log("password" + password);
+
+            if(bcrypt.compareSync(a,hash)) {
+                console.dir(result.recordset[0]);
+                resolve(result.recordset[0]);
+                pool.close()
+            }
+            else{
+                console.log("does not match");
+            }
         }).catch(err => {
             // ... error checks
             console.dir(err);
@@ -39,13 +55,18 @@ function getLogin(email, password) {
     try {
     return new Promise((resolve, reject) =>
     {
+
+      const hash =  bcrypt.hashSync(Password,salt);
+
+      console.log(hash);
+
         pool.connect().then(pool => {
             console.log('before request');
              return pool.request()
                 .input('FirstName', sql.VarChar(50), FirstName)
                 .input('LastName', sql.VarChar(50), LastName)
                 .input('Email', sql.VarChar(50), Email)
-                .input('Password', sql.VarChar(50), Password)
+                .input('Password', sql.VarChar(100),hash)
                // .input('PhoneNumber', sql.VarChar(50), PhoneNumber)
                 .execute('signUpUser')
           }).then(result => {
