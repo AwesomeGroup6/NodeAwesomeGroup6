@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import {NgModule, ViewContainerRef} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from "@angular/common/http";
 import { MatButtonModule } from "@angular/material";
@@ -10,6 +10,7 @@ import {MatInputModule} from '@angular/material/input';
 import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
+import {MatDialogModule} from '@angular/material/dialog';
 
 //IMPORT ANGULAR-MATERIAL COMPONENTS TO USE COMPONENTS TO USE
 
@@ -22,6 +23,7 @@ import { LoginComponent } from './login/login.component';
 import {routing} from "../Routing";
 import {AuthGuard} from "./auth-guard.service";
 import {AuthGateService} from "./auth-gate.service";
+import { CommentsComponent } from './home/comments.component';
 
 export class CustomOption extends ToastOptions {
   showCloseButton = true;
@@ -37,8 +39,10 @@ export class CustomOption extends ToastOptions {
     HomeComponent,
     FriendComponent,
     PagenotfoundComponent,
-    LoginComponent
+    LoginComponent,
+    CommentsComponent
   ],
+  entryComponents: [CommentsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -46,6 +50,7 @@ export class CustomOption extends ToastOptions {
     MatButtonModule,
     ReactiveFormsModule,
     ToastModule.forRoot(),
+    MatDialogModule,
     MatCardModule,
     FormsModule,
     MatListModule,

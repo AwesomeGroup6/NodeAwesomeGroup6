@@ -62,7 +62,7 @@
     <mat-list *ngFor="let post of posts | async" style="margin-top: 10px">
       <mat-card>
         <mat-list-item>
-        <p class="small">{{post.PostDate | date:'HH:mm | dd-MM-yyyy'}}</p>
+        <p class="small">{{post.PostDate | date:'HH:mm | dd-MM-yyyy'}} - {{post.FirstName}} {{post.LastName}}</p>
         </mat-list-item>
 
         <mat-list-item>
@@ -76,17 +76,17 @@
           </mat-card-actions>
         </mat-list-item>
        <mat-list-item style="margin-top: 10px;">
-        <form [formGroup]="commentForm" (keydown)="createComment($event)" novalidate>
+        <form [formGroup]="commentForm" (keydown)="createComment($event, post.PostId)" novalidate>
             <mat-form-field>
               <input matInput type="text" class="form-control" required formControlName="content" placeholder="Comment">
             </mat-form-field>
         </form>
         </mat-list-item>
+        <mat-list-item>
+          <button mat-raised-button color="accent" (click)="getComments(post.PostId)">Comments</button>
+        </mat-list-item>
       </mat-card>
     </mat-list>
-
-
-
   </div>
 
   <div class="col-6 col-md-4">

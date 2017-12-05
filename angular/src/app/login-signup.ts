@@ -1,8 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { User } from "./user";
-import {Observable} from "rxjs/Observable";
-import { catchError, map, tap } from 'rxjs/operators';
+import {HttpClient} from "@angular/common/http";
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import {Router} from "@angular/router";
 

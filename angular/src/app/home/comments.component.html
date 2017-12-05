@@ -1,0 +1,16 @@
+
+<h5>Comments</h5>
+<mat-list *ngFor="let comment of data | async">
+  <mat-card>
+  <mat-card-content>
+    <mat-list-item>
+      <p class="small">{{comment.CommentPostDate | date:'HH:mm | dd-MM-yyyy'}} - {{comment.FirstName}} {{comment.LastName}}</p>
+    </mat-list-item>
+    <mat-list-item>
+      <p>{{comment.CommentText}}</p>
+    </mat-list-item>
+  </mat-card-content>
+  </mat-card>
+</mat-list>
+
+

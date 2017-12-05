@@ -1,18 +1,21 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, ContentChild, Inject, Input, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
 import {AuthGateService} from "../auth-gate.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {ToastsManager} from "ng2-toastr";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {async} from 'rxjs/scheduler/async';
-
+import {MatDialog} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
+import {CommentsComponent} from './comments.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  entryComponents: [CommentsComponent]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit{
   private agS;
 
   friends: Observable<any[]>;
@@ -21,10 +24,12 @@ export class HomeComponent implements OnInit {
   currFriends: Observable<any[]>;
   fRQs: Observable<any>;
   findGs: Observable<any>;
+  currentComments: Observable<any>;
 
-  constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router) {
+  constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router, public dialog: MatDialog) {
     this.agS = agService;
     this.toastr.setRootViewContainerRef(vcr);
+
   }
 
   postForm = new FormGroup ({
@@ -65,13 +70,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  createComment(event) {
+  createComment(event, pId) {
     if(event.keyCode == 13) {
-      if (this.postForm.controls.content.value) {
-        this.agS.createPost(this.postForm.controls.content.value);
-      } else {
-
-      }
+      this.agS.createComment(this.commentForm.controls.content.value, pId);
     }
   }
    findFriends(event){
@@ -100,11 +101,24 @@ export class HomeComponent implements OnInit {
   }
 
   joinGroup(gId){
-    console.log(gId);
+   this.agS.joinGroup(gId);
   }
 
+  getComments(pId){
+    this.currentComments = this.agS.getComments(pId);
+    let dialogRef = this.dialog.open(CommentsComponent, {
+      width: '500px',
+      data: this.currentComments
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
   logout(){
     localStorage.clear();
     this.router.navigate(['login']);
   }
 }
+
+

@@ -1,12 +1,10 @@
-import {Injectable, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {ToastsManager} from "ng2-toastr";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Router} from "@angular/router";
-import {split} from "ts-node/dist";
 import {Observable} from "rxjs/Observable";
 import 'rxjs/add/operator/map';
 import {User} from "./user";
-import {timeout} from 'rxjs/operator/timeout';
 
 @Injectable()
 export class AuthGateService{
@@ -21,6 +19,7 @@ export class AuthGateService{
   currFriends: Observable<User>;
   fRQs: Observable<any>;
   fGs: Observable<any>;
+  currComments: Observable<any>;
 
   constructor(private http: HttpClient, private push: ToastsManager, private router: Router) {}
 
@@ -52,8 +51,8 @@ export class AuthGateService{
     },)
       .subscribe(data =>{
         this.posts = data['posts'];
-        resolve(this.posts);
         console.log(data);
+        resolve(this.posts);
 
       }, error =>{
         this.push.error('Unable to get posts', 'An error occurred');
@@ -201,5 +200,55 @@ export class AuthGateService{
       console.log(err);
     })
 
+  }
+
+  joinGroup(gId){
+    this.http.post(this.testUrl + 'groups/joinGroup', {
+      groupId: gId
+    }, {
+      headers: new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'))
+    }).subscribe(data =>{
+        this.push.success('','Joined group');
+    }, err =>{
+      console.log(err);
+    })
+  }
+
+  createComment(content, pId){
+    console.log(content, pId);
+    this.http.post(this.testUrl+'comments/createcomment', {
+      CommentText: content,
+      PostId: pId
+    }, {
+      headers: new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'))
+    },)
+      .subscribe(data =>{
+        this.push.success('','Comment created');
+      }, error =>{
+        console.log(error);
+
+      })
+  }
+
+
+  getComments(pId){
+    return new Promise((resolve, reject) =>{
+      this.http.post(this.testUrl+'comments/', {
+        PostId: pId
+      },{
+        headers: new HttpHeaders().set('Authorization', 'Bearer '+ localStorage.getItem('token'))
+      })
+        .subscribe(data =>{
+          this.currComments = data['comments'];
+          console.log(data);
+          resolve(this.currComments);
+
+        }, error =>{
+          this.push.error('Unable to get posts', 'An error occurred');
+          console.log(error);
+          reject(error);
+
+        })
+    })
   }
 }
