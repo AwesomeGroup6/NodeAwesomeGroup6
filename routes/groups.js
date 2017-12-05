@@ -6,7 +6,7 @@ var router = express.Router();
 const db = require('../connect_database');
 
 
-router.get('/findGroup',function (req,res,next) {
+router.post('/findGroup',function (req,res,next) {
 
     let title = req.body.title;
 
@@ -21,12 +21,10 @@ router.get('/findGroup',function (req,res,next) {
     }).catch(err=> {
         res.status(500).send({
             text: 'An error occured. Try again'
-        })
-
+        });
         console.log(err);
     })
-
-})
+});
 
 router.post('/joinGroup',function (req,res,next) {
 
@@ -37,7 +35,6 @@ router.post('/joinGroup',function (req,res,next) {
         joinGroup.then(result => {
             if(result = 1) {
                 res.status(200).send({text: 'all was done'});
-
             }else {
                 res.status(500);
             }

@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const jwt = require('jsonwebtoken');
+const cors = require('cors');
 
 let index = require('./routes/index');
 let users = require('./routes/users');
@@ -23,7 +24,7 @@ const app = express();
 
 /* making a session for the application, */
 app.use(cookieParser());
-
+app.use(cors());
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
