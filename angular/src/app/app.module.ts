@@ -11,6 +11,7 @@ import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
 import {MatDialogModule} from '@angular/material/dialog';
+import * as io from 'socket.io-client';
 
 //IMPORT ANGULAR-MATERIAL COMPONENTS TO USE COMPONENTS TO USE
 
@@ -24,6 +25,8 @@ import {routing} from "../Routing";
 import {AuthGuard} from "./auth-guard.service";
 import {AuthGateService} from "./auth-gate.service";
 import { CommentsComponent } from './home/comments.component';
+import { ChatComponent } from './chat/chat.component';
+import {ChatService} from './chat.service';
 
 export class CustomOption extends ToastOptions {
   showCloseButton = true;
@@ -40,7 +43,8 @@ export class CustomOption extends ToastOptions {
     FriendComponent,
     PagenotfoundComponent,
     LoginComponent,
-    CommentsComponent
+    CommentsComponent,
+    ChatComponent
   ],
   entryComponents: [CommentsComponent],
   imports: [
@@ -58,7 +62,7 @@ export class CustomOption extends ToastOptions {
     routing,
     MatFormFieldModule
   ],
-  providers: [MediaServiceService, AuthGuard, {provide: ToastOptions, useClass: CustomOption}, AuthGateService],
+  providers: [MediaServiceService, AuthGuard, {provide: ToastOptions, useClass: CustomOption}, AuthGateService, ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
