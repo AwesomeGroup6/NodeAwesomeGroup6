@@ -1,12 +1,10 @@
-import {Component, ContentChild, Inject, Input, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {AuthGateService} from "../auth-gate.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {ToastsManager} from "ng2-toastr";
 import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
-import {async} from 'rxjs/scheduler/async';
 import {MatDialog} from '@angular/material';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {CommentsComponent} from './comments.component';
 
 @Component({

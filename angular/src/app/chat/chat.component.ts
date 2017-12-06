@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ChatService} from '../chat.service';
-import {isMethodMetadata} from '@angular/compiler-cli';
 
 @Component({
   selector: 'app-chat',
