@@ -9,7 +9,6 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 
 let index = require('./routes/index');
-let users = require('./routes/users');
 let publicroutes = require('./routes/public');
 let secret = require('./config').secret;
 let friends = require('./routes/friends');
@@ -17,7 +16,7 @@ let groups = require('./routes/groups');
 let posts = require('./routes/posts');
 let comments = require('./routes/comments');
 let friendshipRequest = require('./routes/friendshipRequest');
-
+let chat = require('./routes/chat');
 
 const app = express();
 
