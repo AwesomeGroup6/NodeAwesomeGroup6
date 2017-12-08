@@ -1,12 +1,4 @@
-/**
- * Created by Palko on 04/12/2017.
- */
-/**
- * Created by Palko on 03/12/2017.
- */
-/**
- * Created by Palko on 02/12/2017.
- */
+
 var express = require('express');
 var router = express.Router();
 const db = require('../connect_database');

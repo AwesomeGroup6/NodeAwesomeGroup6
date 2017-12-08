@@ -18,6 +18,7 @@ let comments = require('./routes/comments');
 let friendshipRequest = require('./routes/friendshipRequest');
 let chat = require('./routes/chat');
 
+
 const app = express();
 
 /* making a session for the application, */
@@ -32,7 +33,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-
 app.use('/public', publicroutes);
 
 

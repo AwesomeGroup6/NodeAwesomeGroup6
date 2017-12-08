@@ -4,9 +4,7 @@ const db = require('../connect_database');
 const jwt = require('jsonwebtoken');
 const sql = require('mssql')
 const secret = require('../config').secret;
-
 /* for all the non */
-
 
 
 router.post('/login', function(req, res, next) {
@@ -15,18 +13,18 @@ router.post('/login', function(req, res, next) {
     let email = req.body.email;
     let password = req.body.password;
 
-    console.log(email, password)
+    console.log(email, password);
 
     let dbPassword = db.connection(email, password);
 
 
     dbPassword.then(result => {
 
-        if(!isNaN(result)){
-
+            console.log("hi");
+            console.log(result.UserId);
 
             const payload = {
-                id: result
+                id: result.UserId
             };
             var token = jwt.sign(payload, secret, {
                 expiresIn: 1440 // expires in 24 hours
@@ -40,9 +38,6 @@ router.post('/login', function(req, res, next) {
             });
 
 
-        }else {
-            res.status(401);
-        }
 
     }).catch(err => {
         res.status(500).send({text: 'An error occured. Try again'});
@@ -55,18 +50,30 @@ router.post('/login', function(req, res, next) {
 });
 
 
-router.post('/signup', function(req, res){
 
-    if(!req.body.Email || !req.body.Password || !req.body.FirstName || !req.body.LastName){
+router.post('/signup', function(req, res,next){
+
+
+    let email = req.body.email;
+    let password = req.body.password;
+    let firstname = req.body.firstname;
+    let lastname = req.body.lastname;
+
+
+    console.log(firstname);
+
+    if(!email || !password || !firstname || !lastname){
         console.log(req.body);
         res.status(500).send({text: "you need information to send"});
        
     } else {
 
-        console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
-        let dbAccount = db.addaccount(req.body.Email, req.body.Password, req.body.FirstName, req.body.LastName);
+            console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
+        let dbAccount = db.addaccount(email, password, firstname, lastname);
+
+
             dbAccount.then(result => {
-                console.log(result);
+                console.log("result"+result);
                 if(result = 1) {
                 res.status(200).send({text: 'all was done'});
                 }else {
