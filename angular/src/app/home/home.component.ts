@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit{
 
   createPost() {
     if(this.postForm.controls.content.value){
-      this.agS.createPost(this.postForm.controls.content.value);
+      this.agS.createPostService(this.postForm.controls.content.value);
       this.toastr.success('', 'Post submitted');
     }else {
 
