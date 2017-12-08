@@ -1,9 +1,3 @@
-/**
- * Created by Palko on 03/12/2017.
- */
-/**
- * Created by Palko on 02/12/2017.
- */
 var express = require('express');
 var router = express.Router();
 const db = require('../connect_database');
@@ -15,7 +9,11 @@ router.get('/', function(req, res, next) {
 
         let result = db.getFriends(req.user.id);
 
+        console.log("id" + req.user.id);
+
         result.then(friends => {
+
+            console.log("friends" +friends);
 
             res.status(200).json({
                 friends

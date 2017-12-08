@@ -29,8 +29,12 @@ router.get('/', function(req, res, next) {
 
 router.post('/createpost', function(req, res, next){
 
+        let PostContent = req.body.PostContent;
 
-        let dbAccount = db.addpost(req.user.id, req.body.PostContent);
+        console.log("Conentent"+PostContent);
+
+
+        let dbAccount = db.addpost(req.user.id, PostContent);
 
         dbAccount.then(result => {
             console.log(result);

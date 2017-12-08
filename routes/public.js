@@ -13,7 +13,7 @@ router.post('/login', function(req, res, next) {
     let email = req.body.email;
     let password = req.body.password;
 
-    console.log(email, password)
+    console.log(email, password);
 
     let dbPassword = db.connection(email, password);
 
@@ -51,24 +51,29 @@ router.post('/login', function(req, res, next) {
 
 
 
-router.post('/signup', function(req, res){
+router.post('/signup', function(req, res,next){
 
-    if(!req.body.Email || !req.body.Password || !req.body.FirstName || !req.body.LastName){
+
+    let email = req.body.email;
+    let password = req.body.password;
+    let firstname = req.body.firstname;
+    let lastname = req.body.lastname;
+
+
+    console.log(firstname);
+
+    if(!email || !password || !firstname || !lastname){
         console.log(req.body);
         res.status(500).send({text: "you need information to send"});
        
     } else {
 
+            console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
+        let dbAccount = db.addaccount(email, password, firstname, lastname);
 
-
-        console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
-        let dbAccount = db.addaccount(req.body.Email, req.body.Password, req.body.FirstName, req.body.LastName);
-
-
-        console.log("hi" + a);
 
             dbAccount.then(result => {
-                console.log(result);
+                console.log("result"+result);
                 if(result = 1) {
                 res.status(200).send({text: 'all was done'});
                 }else {

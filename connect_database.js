@@ -67,7 +67,6 @@ function getLogin(email, password) {
                 .input('LastName', sql.VarChar(50), LastName)
                 .input('Email', sql.VarChar(50), Email)
                 .input('Password', sql.VarChar(100),hash)
-               // .input('PhoneNumber', sql.VarChar(50), PhoneNumber)
                 .execute('signUpUser')
           }).then(result => {
               console.dir(result);
@@ -82,7 +81,9 @@ function getLogin(email, password) {
     });
 }catch(err) {
     console.log(err);
-}
+        reject(err);
+
+    }
 
 
  }
