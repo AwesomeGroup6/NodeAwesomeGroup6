@@ -1,0 +1,4 @@
+<input [(ngModel)]="message" (keydown)="sendMessage($event)"/>
+<mat-list *ngFor="let message of messages">
+  <mat-list-item> {{message.message}}</mat-list-item>
+</mat-list>

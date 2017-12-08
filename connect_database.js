@@ -1,44 +1,54 @@
-const connect = require('tedious');
-const request = require('tedious').Request;
+const sql = require('mssql');
 
 let config = {
-    userName: 'Lucia',
+    user: 'Lucia',
     password: 'Klucinka007',
     server: 'socialmediadatabase.database.windows.net',
+    database: 'SocialMedia_DB',
     options: {
-        database: 'SocialMedia_DB',
         encrypt: true
     }
 };
 
-let connection = new connect.Connection(config);
-
-connection.config.options.rowCollectionOnDone = true;
-
-connection.on('connect', function (err) {
-    if(err) {
-        console.log(err);
-    } else {
-        test();
-        return connection;
-    }
 
 
-    function test() {
-        let req = new request(
-            "SELECT * FROM Account",
-            function (err, rowCount) {
-                console.log(err, rowCount);
-            }
-        );
 
-        req.on('row', function (col) {
-           for(let i = 0; i < col.length; i++){
-               console.log(col[i].value);
-           }
-        });
+ function getLogin(email) {
+   let emailTest = 'rlgqpxt.kdnni@jnom.org';
+    return new Promise((resolve, reject) =>
+     {
+         new sql.ConnectionPool(config).connect().then(pool => {
+             return pool.query`select password from Account where email = ${email}`
+         }).then(result => {
+             console.dir(result);
+             resolve(result.recordset[0].password);
+         }).catch(err => {
+             // ... error checks
+             reject(err);
+         })
+     });
 
-        connection.execSql(req);
 
-    }
-});
+
+   /*
+     connection.request()
+            .input('email', sql.VarChar, email)
+            .query('select password from Account where email = @email')
+            .then(result1 => {
+                console.log(result1.recordset[0].password);
+                return result1.recordset[0].password;
+            }).catch(err => {
+                console.log(err)
+            })*/
+}
+
+sql.on('error', err => {
+    console.log(err)
+})
+
+
+
+module.exports = {
+    connection: getLogin
+};
+
