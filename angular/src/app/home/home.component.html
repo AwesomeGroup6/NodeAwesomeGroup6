@@ -55,7 +55,7 @@
     <form [formGroup]="postForm" (ngSubmit)="createPost()" novalidate>
       <div class="form-group">
         <mat-form-field>
-          <input matInput type="text" class="form-control" required formControlName="content" placeholder="Content">
+          <input matInput type="text" class="form-control" id="post" required formControlName="content" placeholder="Content">
         </mat-form-field>
       </div>
       <div class="form-group">
@@ -121,7 +121,7 @@
         <div class="form-group">
           <h6>Find groups</h6>
           <mat-form-field>
-            <input matInput type="text" class="form-control" required formControlName="name" placeholder="Name">
+            <input matInput type="text" id='groupName' class="form-control" required formControlName="name" placeholder="Name">
           </mat-form-field>
         </div>
       </form>

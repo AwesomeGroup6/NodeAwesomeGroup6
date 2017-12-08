@@ -98,7 +98,7 @@ export class AuthGateService{
     });
   }
 
-  createPost(content){
+  createPostService(content){
     console.log(content);
     this.http.post(this.testUrl+'posts/createpost', {
       PostContent: content
