@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 export class MediaServiceService {
 
 
-  private testUrl = 'http://localhost:3000/';
+  private testUrl = 'https://exam-fall2017.herokuapp.com/';
 
 
 

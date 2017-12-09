@@ -6,8 +6,9 @@ import * as io from 'socket.io-client';
 
 @Injectable()
 export class ChatService {
-  private url = 'http://localhost:5000';
+  private url = 'https://exam-fall2017.herokuapp.com/';
   private socket;
+
 
   sendMessage(message){
     this.socket.emit('save-message', message);

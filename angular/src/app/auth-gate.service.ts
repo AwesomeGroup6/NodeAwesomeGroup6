@@ -10,7 +10,7 @@ import {User} from "./user";
 export class AuthGateService{
 
 
-  private testUrl = 'http://localhost:3000/';
+  private testUrl = 'https://exam-fall2017.herokuapp.com/';
   private token: string;
 
   friends: Observable <User>;
