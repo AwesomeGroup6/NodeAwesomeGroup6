@@ -2,7 +2,7 @@ const sql = require('mssql');
 const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync();
 
-let pool = new sql.ConnectionPool({
+let config= ({
     user: 'Lucia',
     password: 'Klucinka007',
     server: 'socialmediadatabase.database.windows.net',
@@ -15,9 +15,51 @@ let pool = new sql.ConnectionPool({
 // function which gets a login from an email
 function getLogin(email, password) {
     //let emailTest = 'rlgqpxt.kdnni@jnom.org';
+
     return new Promise((resolve, reject) =>
-    {
-        console.log('before connect');
+
+        {
+            const pool2 = new sql.ConnectionPool(config,err => {
+
+
+        console.log('before request');
+
+         pool2.request()
+
+        .input('Email', sql.VarChar(50), email)
+        .execute('checkLogin1',(err, result) => {
+
+            if(err){
+
+                console.log("something went wrong");
+            }
+
+        let hash = result.recordset[0].Password;
+        const a = password;
+
+        console.log(bcrypt.compareSync(a,hash));
+
+        console.log("hash" + result.recordset[0].Password);
+        console.log("password" + password);
+
+        if(bcrypt.compareSync(a,hash)) {
+        console.dir(result.recordset[0]);
+        resolve(result.recordset[0]);
+        pool2.close();
+                }
+
+        })
+
+    })
+            pool2.on('error', err => {
+                pool2.close();
+
+            })
+});
+
+}
+
+       /* console.log('before connect');
 
         pool.connect().then(pool => {
             console.log('before request');
@@ -45,10 +87,9 @@ function getLogin(email, password) {
         }).catch(err => {
             // ... error checks
             console.dir(err);
-            reject(err);
-        })
-    });
-}
+            reject(err);*/
+
+
 
  // function which will save a user to the database with the used of stored procedues it will get data from frontend.
  function saveAccount(Email, Password, FirstName, LastName) {
@@ -60,24 +101,31 @@ function getLogin(email, password) {
 
       console.log(hash);
 
-        pool.connect().then(pool => {
-            console.log('before request');
-             return pool.request()
+
+        const pool3 = new sql.ConnectionPool(config,err => {
+
+
+                console.log('before request');
+
+        pool3.request()
                 .input('FirstName', sql.VarChar(50), FirstName)
                 .input('LastName', sql.VarChar(50), LastName)
                 .input('Email', sql.VarChar(50), Email)
                 .input('Password', sql.VarChar(100),hash)
-                .execute('signUpUser')
-          }).then(result => {
-              console.dir(result);
-              console.log(result.rowsAffected[0]);
-              resolve(result.rowsAffected[0]);
-              pool.close()
-        }).catch(err => {
-              // ... error checks
-              console.dir(err);
-              reject(err);
-          })
+                .execute('signUpUser',(err, result) => {
+
+                    console.dir(result);
+                    console.log(result.rowsAffected[0]);
+                     resolve(result.rowsAffected[0]);
+                    pool3.close()
+    }).catch(err => {
+            // ... error checks
+            // console.dir(err);
+        reject(err);
+    })
+
+    })
+
     });
 }catch(err) {
     console.log(err);
@@ -92,60 +140,78 @@ function getLogin(email, password) {
     try {
     return new Promise((resolve, reject) =>
     {
-        pool.connect().then(pool => {
-            console.log('before request');
-             return pool.request()
+        const pool4 = new sql.ConnectionPool(config,err => {
+                console.log('before request');
+
+                pool4.request()
                 .input('UserId', sql.Int, UserId)
                 .input('PostContent', sql.VarChar(100), PostContent)
-                .execute('createPost')
-          }).then(result => {
-              console.dir(result);
-              console.log(result.rowsAffected[0]);
-              resolve(result.rowsAffected[0]);
-             pool.close()
+                .execute('createPost',(err, result) => {
 
-            // sql.close();
-          }).catch(err => {
-              // ... error checks
-              console.dir(err);
-              reject(err);
-          })
+                    if(err){
+                        console.log(err);
+                    }
+
+                console.dir(result);
+                console.log(result.rowsAffected[0]);
+                resolve(result.rowsAffected[0]);
+                pool4.close();
+
+        })
+
+
+    })
+
+        pool4.on('error', err => {
+            pool4.close();
+
+        })
           
+    }).catch(err => {
+        // ... error checks
+        console.dir(err);
+        reject(err);
     });
 }catch(err) {
 console.log(err);
 }
  }
+/*
 
  function getUserIdFromEmail(email) {
+
+
      return new Promise((resolve, reject) =>
       {
           console.log('before connect')
 
-        pool.connect().then(pool => {
-            console.log('before request');
-             return pool.request()
-                .input('Email', sql.VarChar(50), email)
-                .execute('getUserIdFromEmail')
-          }).then(result => {
-              console.dir(result.recordset[0].UserId);
-              resolve(result.recordset[0].UserId);
-            pool.close()
+     const pool5 = new sql.ConnectionPool(config,err => {
+             console.log('before request');
 
-            //sql.close();
-          }).catch(err => {
+     pool5.request()
+                .input('Email', sql.VarChar(50), email)
+                .execute('getUserIdFromEmail',(err, result) => {
+
+
+         console.dir(result.recordset[0].UserId);
+     resolve(result.recordset[0].UserId);
+     pool.close()
+
+     //sql.close();
+
+     }).catch(err => {
               // ... error checks
               console.dir(err);
               reject(err);
           })
       });
       
- }
- 
- sql.on('error', err => {
-     console.log(err)
  })
+ }
+*/
 
+
+/*
 
  function deletePost(postId) {
     return new Promise((resolve, reject) =>
@@ -171,7 +237,8 @@ console.log(err);
      });
 
  }
-
+*/
+/*
      function deletePost(postId) {
          return new Promise((resolve, reject) =>
          {
@@ -195,69 +262,99 @@ console.log(err);
              })
          });
      
-}
+}*/
 
 function getFriendsPost(UserId){
 
     return new Promise((resolve, reject) =>
     {
-        pool.close();
+        const pool5 = new sql.ConnectionPool(config,err => {
+                console.log('before request');
 
-        pool.connect().then(pool => {
-            console.log('before request');
-            return pool.request()
+            pool5.request()
                 .input('UserId', sql.Int(50), UserId)
-                .execute('displayFriendsPosts')
-        }).then(result => {
-            resolve(result.recordset);
-            pool.close()
+                .execute('displayFriendsPosts',(err, result) => {
 
-        }).catch(err => {
-            reject(err);
+                    if(err){
+                        console.log(err);
+                    }
+
+                resolve(result.recordset);
+                pool5.close()
+
+            })
+
+
+        })
+        pool5.on('error', err => {
+            pool5.close();
+
         })
     });
 
-};
+}
 
 
 function getFriends(UserId){
 
     return new Promise((resolve, reject) =>
     {
-        pool.close();
-        pool.connect().then(pool => {
-            return pool.request()
+        const pool6 = new sql.ConnectionPool(config,err => {
+                console.log('before request');
+
+                pool6.request()
                 .input('UserId', sql.Int(50), UserId)
-                .execute('getFriends')
-        }).then(result => {
-            resolve(result.recordset);
-            pool.close()
+                .execute('getFriends',(err, result) => {
 
-            pool.close()
-        }).catch(err => {
-            reject(err);
+                    if(err){
+
+                        console.log(err);
+                    }
+
+                    resolve(result.recordset);
+
+                })
+
         })
+
+            pool6.on('error', err => {
+            pool6.close();
+
+            })
     });
+}
 
-};
 
-function getGroupsUserIsPartOf(UserId){
+function getGroupsUserIsPartOf(UserId) {
+
     return new Promise((resolve, reject) =>
-    {
-        pool.connect().then(pool => {
-            console.log('before request');
-            return pool.request()
-                .input('userId', sql.Int(50), UserId)
-                .execute('displayGroupsIPartOf')
-        }).then(result => {
-            resolve(result.recordset);
-            pool.close()
-        }).catch(err => {
-            reject(err);
-        })
-    });
 
-};
+    {
+        console.log('before request');
+
+        const pool7 = new sql.ConnectionPool(config, err => {
+
+            pool7.request()
+                .input('userId', sql.Int(50), UserId)
+                .execute('displayGroupsIPartOf', (err, result) => {
+
+                    if(err){
+                        console.log(err);
+                    }
+
+                    resolve(result.recordset);
+                    pool7.close();
+
+                })
+            })
+
+        pool7.on('error', err => {
+            pool7.close();
+
+        })
+
+    });
+}
 
 
 function findFriends(FirstName,LastName) {
@@ -265,17 +362,26 @@ function findFriends(FirstName,LastName) {
     return new Promise((resolve,reject) =>
 
     {
-        pool.connect().then(pool => {
-            return pool.request()
+        const pool8 = new sql.ConnectionPool(config,err => {
+
+            pool8.request()
             .input("FirstName",sql.VarChar(50),FirstName)
                 .input("LastName",sql.VarChar(50),LastName)
-                .execute('findFriend')
-        }).then(result => {
-            resolve(result.recordset);
-            pool.close();
-        }).catch(err => {
-            reject(err);
-        });
+                .execute('findFriend',(err, result) => {
+
+                    if(err){
+
+                        console.log(err);
+                    }
+
+                resolve(result.recordset);
+            })
+        })
+
+        pool8.on('error', err => {
+            pool8.close();
+
+        })
 
 
     });
@@ -287,107 +393,130 @@ function findGroup(title) {
 
     return new Promise((resolve,reject) =>
     {
-        pool.connect().then(pool =>{
-            return pool.request()
+        const pool9 = new sql.ConnectionPool(config,err => {
+
+            pool9.request()
+
                 .input("title",sql.VarChar(50),title)
-                .execute('findGroup')
-        }).then(result => {
-            resolve(result.recordset);
-            pool.close();
-        }).catch(err =>{
-            reject(err);
+                .execute('findGroup',(err, result) => {
+
+                    if(err){
+                        console.log(err);
+                    }
+
+                resolve(result.recordset);
+                 pool9.close();
+            })
+
         })
-    })
+
+        pool9.on('error', err => {
+            pool9.close();
+
+        })
 
 
+    });
 
 }
 
 function joinGroup(userId,groupId) {
-    try {
 
     return new Promise((resolve,reject) =>
 
     {
-        pool.connect().then(pool =>{
-            return pool.request()
+        const pool10 = new sql.ConnectionPool(config,err => {
+                pool10.request()
                 .input("userId",sql.Int(50),userId)
                 .input("groupId",sql.VarChar(50),groupId)
-                .execute('joinGroup')
-        }).then(result  =>{
-            console.dir(result);
-            console.log(result.rowsAffected[0]);
-            resolve(result.rowsAffected[0]);
-            pool.close();
+                .execute('joinGroup',(err, result) => {
 
-        }).catch(err =>{
-            reject(err);
-    })
+                    if(err){
+                        console.log(err);
+                    }
+                console.dir(result);
+                console.log(result.rowsAffected[0]);
+                resolve(result.rowsAffected[0]);
+                pool10.close();
+                })
+        })
+
+        pool10.on('error', err => {
+            poo10.close();
+
+        })
+
 
     });
 
-    }catch(err){
-            console.log(err);
-        }
 }
 
 function requestFriendship(UserId, FriendId) {
-    try {
-    return new Promise((resolve, reject) =>
-    {
-        pool.connect().then(pool => {
-            console.log('before request');
-             return pool.request()
-                .input('UserId', sql.Int, UserId)
-                .input('FriendId', sql.Int, FriendId)
-                .execute('requestFriendship')
-          }).then(result => {
-            resolve(result.rowsAffected[0]);
-             pool.close()
 
-            // sql.close();
-          }).catch(err => {
-              // ... error checks
-              console.dir(err);
-              reject(err);
-          })
-          
-    });
-}catch(err) {
-console.log(err);
+        return new Promise((resolve, reject) =>
+        {
+            const pool11 = new sql.ConnectionPool(config,err => {
+                pool11.request()
+                return pool11.request()
+                    .input('UserId', sql.Int, UserId)
+                    .input('FriendId', sql.Int, FriendId)
+                    .execute('requestFriendship',(err, result) => {
+
+                        if(err){
+                            console.log(err);
+                        }
+                        resolve(result.rowsAffected[0]);
+                        pool11.close();
+                    })
+                })
+
+
+            pool11.on('error', err => {
+                poo11.close();
+
+            })
+
+
+
+        });
+
 }
- }
+
+
+
 
 
 function addcomment(PostId,UserId,CommentText) {
 
-    try {
-        return new Promise((resolve, reject) =>
-        {
-            pool.connect().then(pool => {
-                console.log('before request');
-                return pool.request()
+        return new Promise((resolve, reject) =>{
+            const pool12 = new sql.ConnectionPool((config, err) => {
+                    pool12.request()
                     .input('PostId', sql.Int, PostId)
                     .input('UserId', sql.Int, UserId)
                     .input('CommentText',sql.VarChar(100),CommentText)
-                    .execute('createComment')
-            }).then(result => {
-                resolve(result.rowsAffected[0]);
-                pool.close()
+                    .execute('createComment',(err, result) => {
 
-                // sql.close();
-            }).catch(err => {
-                // ... error checks
-                console.dir(err);
-                reject(err);
+                        if(err){
+
+                            console.log(err);
+                        }
+
+                    resolve(result.rowsAffected[0]);
+                    pool12.close()
+
+                })
+
+            })
+
+            pool12.on('error', err => {
+                poo12.close();
+
             })
 
         });
-    }catch(err) {
-        console.log(err);
-    }
-}
 
+}
+/*
      function deleteComment(commentId) {
          return new Promise((resolve, reject) =>
          {
@@ -411,7 +540,7 @@ function addcomment(PostId,UserId,CommentText) {
              })
          });
 
-     }
+     }*/
 
 
 function receiveFriendRequest(UserId){
@@ -419,22 +548,28 @@ function receiveFriendRequest(UserId){
     {
         console.log('before connect')
 
-        pool.connect().then(pool => {
-            console.log('before request');
-            return pool.request()
+        const pool13 = new sql.ConnectionPool((config, err) => {
+            pool13.request()
                 .input('UserId', sql.Int, UserId)
-                .execute('getFriendrequest1')
-        }).then(result => {
-            resolve(result.recordset);
-            pool.close()
+                .execute('getFriendrequest1',(err, result) => {
 
-            //sql.close();
-        }).catch(err => {
-            // ... error checks
-            console.dir(err);
-            reject(err);
+                    if(err){
+                        console.log(err);
+                    }
+
+                    resolve(result.recordset);
+                    pool13.close();
+
+                })
+
+
         })
-    });
+
+        pool13.on('error', err => {
+            poo13.close();
+        })
+
+        });
 
 }
 
@@ -445,20 +580,25 @@ function revokeFriendship(UserId,FriendId){
     {
         console.log('before connect')
 
-        pool.connect().then(pool => {
-            console.log('before request');
-            return pool.request()
+        const pool14 = new sql.ConnectionPool((config, err) => {
+            pool14.request()
                 .input('UserId', sql.Int, UserId)
                 .input('FriendId', sql.Int, FriendId)
-                .execute('revokeFriendship')
-        }).then(result => {
-            console.log(result.rowsAffected[0]);
-            resolve(result.rowsAffected[0]);
-            pool.close()
-        }).catch(err => {
-            // ... error checks
-            console.dir(err);
-            reject(err);
+                .execute('revokeFriendship',(err, result) => {
+
+                    if(err){
+                        console.log(err);
+                    }
+
+                    console.log(result.rowsAffected[0]);
+                    resolve(result.rowsAffected[0]);
+                    pool14.close()
+
+                })
+        })
+
+        pool14.on('error', err => {
+            poo14.close();
         })
     });
 
@@ -469,22 +609,19 @@ function getComments(PostId){
 
     return new Promise((resolve, reject) =>
     {
-        console.log('before connect')
-
-        pool.connect().then(pool => {
-            console.log('before request');
-            return pool.request()
+        const pool15 = new sql.ConnectionPool((config, err) => {
+            pool15.request()
                 .input('PostId', sql.Int, PostId)
-                .execute('getComments')
-        }).then(result => {
-            console.log(result.recordset);
-            resolve(result.recordset);
-            pool.close()
-            pool.close()
-        }).catch(err => {
-            // ... error checks
-            console.dir(err);
-            reject(err);
+                .execute('getComments',(err, result) => {
+
+                    resolve(result.recordset);
+                    pool15.close()
+
+            })
+
+        })
+        pool15.on('error', err => {
+            poo15.close();
         })
     });
 
@@ -500,17 +637,25 @@ sql.on('error', err => {
      connection: getLogin,
      addaccount: saveAccount,
      addpost: savePost,
+/*
      getidfromemail: getUserIdFromEmail,
+*/
+/*
      deletePost: deletePost,
+*/
      getFriendsPost :getFriendsPost,
      getFriends: getFriends,
+/*
      getGroupsUserIsPartOf : getGroupsUserIsPartOf,
+*/
      findFriends:findFriends,
      findGroup: findGroup,
      joinGroup:joinGroup,
      requestFriendship: requestFriendship,
      addcomment: addcomment,
+/*
      deleteComment: deleteComment,
+*/
      receiveFriendRequest:receiveFriendRequest,
      revokeFriendship:revokeFriendship,
      getComments:getComments

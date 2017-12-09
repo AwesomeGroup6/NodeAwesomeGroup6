@@ -10,10 +10,10 @@ chai.use(chaiHttp);
 describe('/POST signup', () => {
     it('user should create account', (done) => {
         let a = {
-            email: "test1@gmail.com",
-            password: "trial",
-            firstname: "lucia",
-            lastname: "lucia",
+            Email: "test1@gmail.com",
+            Password: "trial",
+            FirstName: "lucia",
+            LastName: "lucia",
 
         }
         chai.request('localhost:3000/public')
