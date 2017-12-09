@@ -48,15 +48,10 @@ export class HomeComponent implements OnInit{
 
   ngOnInit() {
     this.currFriends = this.agS.getFriends();
-    setTimeout(() => {
     this.posts = this.agS.getPosts();
-    }, 1000);
-    setTimeout(() => {
     this.groups = this.agS.getGroups();
-    }, 2000);
-    setTimeout(() => {
-      this.fRQs = this.agS.getFRs();
-    }, 3000);
+    this.fRQs = this.agS.getFRs();
+
   }
 
   createPost() {
@@ -107,10 +102,6 @@ export class HomeComponent implements OnInit{
     let dialogRef = this.dialog.open(CommentsComponent, {
       width: '500px',
       data: this.currentComments
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
     });
   }
   logout(){

@@ -24,8 +24,6 @@ export class AuthGateService{
   constructor(private http: HttpClient, private push: ToastsManager, private router: Router) {}
 
 
- // TODO all request in here
-
   getFriends(){
     return new Promise((resolve, reject) =>{
     this.http.get(this.testUrl + 'friends/', {
@@ -223,6 +221,7 @@ export class AuthGateService{
       headers: new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'))
     },)
       .subscribe(data =>{
+        console.log(content, pId);
         this.push.success('','Comment created');
       }, error =>{
         console.log(error);

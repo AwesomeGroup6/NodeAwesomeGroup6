@@ -58,7 +58,7 @@ app.use(function(req, res, next){
 app.use('/friends',friends);
 app.use('/groups',groups);
 app.use('/posts',posts);
-app.use('/comments',comments);
+app.use('/comments', comments);
 app.use('/friendshipRequest',friendshipRequest);
 
 

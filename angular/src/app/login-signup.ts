@@ -37,7 +37,7 @@ export class MediaServiceService {
   }
   signUserUp (email, pass, first, last, phone, bod, gender){
     this.http
-      .post(this.testUrl+'public/signup', {Email: email, Password: pass, FirstName: first, LastName: last})
+      .post(this.testUrl+'public/signup', {email: email, password: pass, firstname: first, lastname: last})
       .subscribe(
         // Successful responses call the first callback.
         data => {

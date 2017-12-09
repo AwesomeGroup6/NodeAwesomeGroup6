@@ -34,7 +34,8 @@ function getLogin(email, password) {
                 console.log("something went wrong");
             }
 
-        let hash = result.recordset[0].Password;
+        try {
+            let hash = result.recordset[0].Password;
         const a = password;
 
         console.log(bcrypt.compareSync(a,hash));
@@ -47,6 +48,11 @@ function getLogin(email, password) {
         resolve(result.recordset[0]);
         pool2.close();
                 }
+
+        } catch(err) {
+            console.log('user incorrect');
+            reject(err);
+        }
 
         })
 
@@ -97,9 +103,9 @@ function getLogin(email, password) {
     return new Promise((resolve, reject) =>
     {
 
-      const hash =  bcrypt.hashSync(Password,salt);
+      const hash =  bcrypt.hashSync(Password, salt);
 
-      console.log(hash);
+      console.log(hash, 'here');
 
 
         const pool3 = new sql.ConnectionPool(config,err => {
@@ -111,7 +117,7 @@ function getLogin(email, password) {
                 .input('FirstName', sql.VarChar(50), FirstName)
                 .input('LastName', sql.VarChar(50), LastName)
                 .input('Email', sql.VarChar(50), Email)
-                .input('Password', sql.VarChar(100),hash)
+                .input('Password', sql.VarChar(100), hash)
                 .execute('signUpUser',(err, result) => {
 
                     console.dir(result);
@@ -120,7 +126,7 @@ function getLogin(email, password) {
                     pool3.close()
     }).catch(err => {
             // ... error checks
-            // console.dir(err);
+            console.dir(err);
         reject(err);
     })
 
@@ -362,7 +368,7 @@ function findFriends(FirstName,LastName) {
     return new Promise((resolve,reject) =>
 
     {
-        const pool8 = new sql.ConnectionPool(config,err => {
+        const pool8 = new sql.ConnectionPool(config, err => {
 
             pool8.request()
             .input("FirstName",sql.VarChar(50),FirstName)
@@ -370,10 +376,8 @@ function findFriends(FirstName,LastName) {
                 .execute('findFriend',(err, result) => {
 
                     if(err){
-
                         console.log(err);
                     }
-
                 resolve(result.recordset);
             })
         })
@@ -489,7 +493,7 @@ function requestFriendship(UserId, FriendId) {
 function addcomment(PostId,UserId,CommentText) {
 
         return new Promise((resolve, reject) =>{
-            const pool12 = new sql.ConnectionPool((config, err) => {
+            const pool12 = new sql.ConnectionPool(config, err => {
                     pool12.request()
                     .input('PostId', sql.Int, PostId)
                     .input('UserId', sql.Int, UserId)
@@ -548,7 +552,7 @@ function receiveFriendRequest(UserId){
     {
         console.log('before connect')
 
-        const pool13 = new sql.ConnectionPool((config, err) => {
+        const pool13 = new sql.ConnectionPool(config, err => {
             pool13.request()
                 .input('UserId', sql.Int, UserId)
                 .execute('getFriendrequest1',(err, result) => {
@@ -580,7 +584,7 @@ function revokeFriendship(UserId,FriendId){
     {
         console.log('before connect')
 
-        const pool14 = new sql.ConnectionPool((config, err) => {
+        const pool14 = new sql.ConnectionPool(config, err => {
             pool14.request()
                 .input('UserId', sql.Int, UserId)
                 .input('FriendId', sql.Int, FriendId)
@@ -609,7 +613,7 @@ function getComments(PostId){
 
     return new Promise((resolve, reject) =>
     {
-        const pool15 = new sql.ConnectionPool((config, err) => {
+        const pool15 = new sql.ConnectionPool(config, err => {
             pool15.request()
                 .input('PostId', sql.Int, PostId)
                 .execute('getComments',(err, result) => {
@@ -645,9 +649,9 @@ sql.on('error', err => {
 */
      getFriendsPost :getFriendsPost,
      getFriends: getFriends,
-/*
+
      getGroupsUserIsPartOf : getGroupsUserIsPartOf,
-*/
+
      findFriends:findFriends,
      findGroup: findGroup,
      joinGroup:joinGroup,
@@ -659,7 +663,6 @@ sql.on('error', err => {
      receiveFriendRequest:receiveFriendRequest,
      revokeFriendship:revokeFriendship,
      getComments:getComments
-
 
  };
  

@@ -65,7 +65,6 @@ router.post('/signup', function(req, res,next){
     if(!email || !password || !firstname || !lastname){
         console.log(req.body);
         res.status(500).send({text: "you need information to send"});
-       
     } else {
 
             console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
