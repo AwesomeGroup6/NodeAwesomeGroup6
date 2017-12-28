@@ -6,12 +6,14 @@ import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {MatDialog} from '@angular/material';
 import {CommentsComponent} from './comments.component';
+import { QrcodeComponent } from './qrcode.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  entryComponents: [CommentsComponent]
+  entryComponents: [CommentsComponent, QrcodeComponent]
+  
 })
 export class HomeComponent implements OnInit{
   private agS;
@@ -23,6 +25,7 @@ export class HomeComponent implements OnInit{
   fRQs: Observable<any>;
   findGs: Observable<any>;
   currentComments: Observable<any>;
+  Uri: Observable<any>;
 
   constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router, public dialog: MatDialog) {
     this.agS = agService;
@@ -51,7 +54,7 @@ export class HomeComponent implements OnInit{
     this.posts = this.agS.getPosts();
     this.groups = this.agS.getGroups();
     this.fRQs = this.agS.getFRs();
-
+    this.Uri = this.agS.getUri();
   }
 
   createPost() {
@@ -107,6 +110,18 @@ export class HomeComponent implements OnInit{
   logout(){
     localStorage.clear();
     this.router.navigate(['login']);
+  }
+  getUri(){
+    try {
+    this.Uri = this.agS.getUri();
+    }catch(err) {
+      console.log(err)
+    }
+    console.log(this.Uri);
+    let dialogRef = this.dialog.open(QrcodeComponent, {
+      width: '500px',
+      data: this.Uri
+    });
   }
 }
 

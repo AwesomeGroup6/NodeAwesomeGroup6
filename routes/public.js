@@ -4,8 +4,12 @@ const db = require('../connect_database');
 const jwt = require('jsonwebtoken');
 const sql = require('mssql')
 const secret = require('../config').secret;
-/* for all the non */
+const auth = require('authenticator');
+const fs = require('fs');
 
+let path = './Authenticator/'
+let userid = '';
+/* for all the non */
 
 router.post('/login', function(req, res, next) {
 
@@ -19,9 +23,15 @@ router.post('/login', function(req, res, next) {
 
 
     dbPassword.then(result => {
-
-            console.log("hi");
-            console.log(result.UserId);
+        userid = result.UserId;
+        let filePath = path + 'authUser' + result.UserId + '.json';
+        console.log(filePath);
+        try {
+        let test = fs.readFileSync(filePath);
+        }catch(err){
+            console.log(err);
+        }
+        if (!fs.existsSync(filePath)) {
 
             const payload = {
                 id: result.UserId
@@ -36,6 +46,15 @@ router.post('/login', function(req, res, next) {
                 message: 'Enjoy your token!',
                 token: token
             });
+        
+        }else{
+            res.status(200).json({
+                success: true,
+                message: 1
+            })
+        }
+
+            
 
 
 
@@ -47,6 +66,40 @@ router.post('/login', function(req, res, next) {
 
 
 
+});
+
+router.post('/authenticatekey', function(req,res,next) {
+    let readPath = path + 'authUser'  +userid+ '.json';
+    console.log('I AM HERE AND ARE TRYING TO SOLVE THIS', readPath);
+        let rawdata = fs.readFileSync(readPath);  
+        let user = JSON.parse(rawdata);
+
+
+
+    let formattedKey = user.authtoken;
+    console.log(formattedKey);
+    console.log(req.body.key);
+      if(testkey(formattedKey, req.body.key)) {
+        const payload = {
+            id: userid
+        };
+        var token = jwt.sign(payload, secret, {
+            expiresIn: 1440 // expires in 24 hours
+        });
+
+        // return the information including token as JSON
+        res.status(200).json({
+            success: true,
+            message: 'Enjoy your token!',
+            token: token
+        });
+        
+        
+    
+      } else {
+        res.status(500).send('token invalid');
+          
+      }
 });
 
 
@@ -87,6 +140,16 @@ router.post('/signup', function(req, res,next){
 
        
     });
+
+    function testkey(token, key) {
+        let testooo = auth.verifyToken(token, key)
+
+        if (testooo == null) {
+            return false;
+        }else {
+            return true;
+        }
+    }
 
 
 

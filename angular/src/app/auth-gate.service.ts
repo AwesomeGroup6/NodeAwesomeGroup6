@@ -10,7 +10,7 @@ import {User} from "./user";
 export class AuthGateService{
 
 
-  private testUrl = 'https://exam-fall2017.herokuapp.com/';
+  private testUrl = 'http://localhost:3000/';//'https://exam-fall2017.herokuapp.com/';
   private token: string;
 
   friends: Observable <User>;
@@ -20,6 +20,7 @@ export class AuthGateService{
   fRQs: Observable<any>;
   fGs: Observable<any>;
   currComments: Observable<any>;
+  uri: Observable<any>;
 
   constructor(private http: HttpClient, private push: ToastsManager, private router: Router) {}
 
@@ -250,4 +251,22 @@ export class AuthGateService{
         })
     })
   }
+
+  getUri(){
+    return new Promise((resolve, reject) => {
+      this.http.get(this.testUrl + 'auth/', {
+        headers: new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'))
+      })
+        .subscribe(data => {
+          this.uri = data['Uri'];
+          console.log(data);
+          resolve(this.uri);
+          //this.router.navigate(['qrcode']);
+
+        }, error => {
+          console.log(error);
+          reject(error);
+        })
+    });
+}
 }

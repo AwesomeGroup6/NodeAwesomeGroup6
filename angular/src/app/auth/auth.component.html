@@ -1,0 +1,15 @@
+<div class="example-container">
+  <mat-card>
+    <h2>Authenticate</h2>
+    <form [formGroup]="authForm" (ngSubmit)="authenticate()" novalidate>
+      <div class="form-group">
+          <mat-form-field>
+          <input matInput type="key" class="form-control" required formControlName="key" placeholder="Key">
+            </mat-form-field>
+      </div>
+      <div class="form-group">
+        <button mat-raised-button color="primary" type="submit">Authenticate</button>
+      </div>
+    </form>
+</mat-card>
+</div>

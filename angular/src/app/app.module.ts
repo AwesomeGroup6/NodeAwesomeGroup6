@@ -26,6 +26,8 @@ import {AuthGateService} from "./auth-gate.service";
 import { CommentsComponent } from './home/comments.component';
 import { ChatComponent } from './chat/chat.component';
 import {ChatService} from './chat.service';
+import {QrcodeComponent} from './home/qrcode.component';
+import { AuthComponent } from './auth/auth.component'
 
 export class CustomOption extends ToastOptions {
   showCloseButton = true;
@@ -43,7 +45,9 @@ export class CustomOption extends ToastOptions {
     PagenotfoundComponent,
     LoginComponent,
     CommentsComponent,
-    ChatComponent
+    ChatComponent,
+    QrcodeComponent,
+    AuthComponent
   ],
   entryComponents: [CommentsComponent],
   imports: [

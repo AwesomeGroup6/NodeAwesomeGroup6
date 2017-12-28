@@ -22,7 +22,7 @@ function getLogin(email, password) {
             const pool2 = new sql.ConnectionPool(config,err => {
 
 
-        console.log('before request');
+        console.log('before request getLogin25');
 
          pool2.request()
 
@@ -38,13 +38,7 @@ function getLogin(email, password) {
             let hash = result.recordset[0].Password;
         const a = password;
 
-        console.log(bcrypt.compareSync(a,hash));
-
-        console.log("hash" + result.recordset[0].Password);
-        console.log("password" + password);
-
         if(bcrypt.compareSync(a,hash)) {
-        console.dir(result.recordset[0]);
         resolve(result.recordset[0]);
         pool2.close();
                 }
@@ -111,7 +105,7 @@ function getLogin(email, password) {
         const pool3 = new sql.ConnectionPool(config,err => {
 
 
-                console.log('before request');
+                console.log('before request saveAccount108');
 
         pool3.request()
                 .input('FirstName', sql.VarChar(50), FirstName)
@@ -147,7 +141,7 @@ function getLogin(email, password) {
     return new Promise((resolve, reject) =>
     {
         const pool4 = new sql.ConnectionPool(config,err => {
-                console.log('before request');
+                console.log('before request savePost 144');
 
                 pool4.request()
                 .input('UserId', sql.Int, UserId)
@@ -275,7 +269,7 @@ function getFriendsPost(UserId){
     return new Promise((resolve, reject) =>
     {
         const pool5 = new sql.ConnectionPool(config,err => {
-                console.log('before request');
+                console.log('before request getFriends272');
 
             pool5.request()
                 .input('UserId', sql.Int(50), UserId)
@@ -306,7 +300,7 @@ function getFriends(UserId){
     return new Promise((resolve, reject) =>
     {
         const pool6 = new sql.ConnectionPool(config,err => {
-                console.log('before request');
+                console.log('before request getfriends303');
 
                 pool6.request()
                 .input('UserId', sql.Int(50), UserId)
@@ -336,7 +330,7 @@ function getGroupsUserIsPartOf(UserId) {
     return new Promise((resolve, reject) =>
 
     {
-        console.log('before request');
+        console.log('before request getgroupsuserispartof333');
 
         const pool7 = new sql.ConnectionPool(config, err => {
 

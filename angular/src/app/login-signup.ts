@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
 export class MediaServiceService {
 
 
-  private testUrl = 'https://exam-fall2017.herokuapp.com/';
+  private testUrl = 'http://localhost:3000/';//'https://exam-fall2017.herokuapp.com/';
 
 
 
@@ -20,12 +20,19 @@ export class MediaServiceService {
       .subscribe(
         // Successful responses call the first callback.
         data => {
+          if(data['message'] !== 1) {
+
+          
             let token = data['token'];
             localStorage.setItem('token', token );
             localStorage.setItem('email', email);
             if(data['success']) {
               this.router.navigate(['home']);
             }
+          } else {
+              this.router.navigate(['auth']);
+            
+          }
           console.log(data);
         },
         // Errors will call this callback instead:
@@ -47,6 +54,28 @@ export class MediaServiceService {
         // Errors will call this callback instead:
         err => {
           this.push.error('Try again', 'An error occurred');
+          console.log('Something went wrong!', err);
+        }
+      );
+  }
+
+  authUser (key) {
+    this.http
+      .post(this.testUrl + 'public/authenticatekey', {key: key}, )
+      .subscribe(
+        // Successful responses call the first callback.
+        data => {
+                    
+            let token = data['token'];
+            localStorage.setItem('token', token );
+            if(data['success']) {
+              this.router.navigate(['home']);
+            }
+          console.log(data);
+        },
+        // Errors will call this callback instead:
+        err => {
+          this.push.error('key used was wrong', 'Login incorrect');
           console.log('Something went wrong!', err);
         }
       );

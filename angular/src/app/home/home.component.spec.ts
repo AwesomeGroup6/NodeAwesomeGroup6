@@ -5,6 +5,7 @@ import {ChatComponent} from '../chat/chat.component';
 import {SignupComponent} from '../signup/signup.component';
 import {PagenotfoundComponent} from '../pagenotfound/pagenotfound.component';
 import {CommentsComponent} from './comments.component';
+import {QrcodeComponent} from './qrcode.component';
 import {FriendComponent} from '../friend/friend.component';
 import {LoginComponent} from '../login/login.component';
 import {Component, OnInit, ViewContainerRef} from '@angular/core';

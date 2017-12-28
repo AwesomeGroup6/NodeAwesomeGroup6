@@ -99,6 +99,7 @@
     <mat-card>
       <h5>Profile</h5>
       <button mat-raised-button type="button" (click)="logout()">Logout</button>
+      <button mat-raised-button color="primary" (click)="getUri()">Get Authenticator!</button>
     </mat-card>
 
     <mat-card style="margin-top: 10px">
@@ -141,4 +142,5 @@
     </mat-card>
 
   </div>
+  {{Uri.uriForQR}}
 </div>

@@ -18,12 +18,13 @@ import {FriendComponent} from './friend/friend.component';
 import {HomeComponent} from './home/home.component';
 import {LoginComponent} from './login/login.component';
 import {CustomOption} from './app.module';
+import { AuthComponent } from './auth/auth.component';
 
 describe('AuthGateService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports:[MatButtonModule, BrowserAnimationsModule, MatListModule, routing, ToastModule, HttpClientModule, ReactiveFormsModule, FormsModule, MatFormFieldModule, MatCardModule, MatInputModule],
-      declarations: [ LoginComponent, FriendComponent, ChatComponent, SignupComponent, HomeComponent, CommentsComponent ],
+      declarations: [ LoginComponent, FriendComponent, ChatComponent, SignupComponent, HomeComponent, CommentsComponent, AuthComponent ],
       providers: [AuthGateService, ToastsManager, {provide: ToastOptions, useClass: CustomOption}]
     });
   });
