@@ -18,7 +18,7 @@ export class MediaServiceService {
     this.http
       .post(this.testUrl + 'public/login', {email: email, password: pass}, )
       .subscribe(
-        // Successful responses call the first callback.
+        // Successful responses call on the first callback.
         data => {
           if(data['message'] !== 1) {
 

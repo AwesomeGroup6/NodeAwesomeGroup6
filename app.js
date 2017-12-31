@@ -17,6 +17,8 @@ let posts = require('./routes/posts');
 let comments = require('./routes/comments');
 let friendshipRequest = require('./routes/friendshipRequest');
 let chat = require('./routes/chat');
+//let authenticator = require('./routes/authenticator');
+let auth = require('./routes/auth');
 
 
 const app = express();
@@ -40,7 +42,6 @@ app.use(function(req, res, next){
   if(req.headers && req.headers.authorization){
 
     let token = req.headers.authorization.split(' ')[1];
-    console.log(token);
     
     jwt.verify(token, secret, function(err, decode){
       if (err) res.status(401).send({text: 'User not identified'});
@@ -55,6 +56,8 @@ app.use(function(req, res, next){
 
 });
 
+app.use('/auth', auth);
+//app.use('/authenticator', authenticator);
 app.use('/friends',friends);
 app.use('/groups',groups);
 app.use('/posts',posts);

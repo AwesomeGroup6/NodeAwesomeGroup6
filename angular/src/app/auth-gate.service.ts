@@ -253,14 +253,15 @@ export class AuthGateService{
   }
 
   getUri(){
+    console.log('GET URI IN AUTH_GATE LINE 256');
     return new Promise((resolve, reject) => {
       this.http.get(this.testUrl + 'auth/', {
         headers: new HttpHeaders().set('Authorization', 'Bearer ' + localStorage.getItem('token'))
       })
         .subscribe(data => {
-          this.uri = data['Uri'];
-          console.log(data);
-          resolve(this.uri);
+          console.log('TEST 262 GET URI');
+          let URI = data['Uri'];
+          resolve(URI);
           //this.router.navigate(['qrcode']);
 
         }, error => {
@@ -268,5 +269,46 @@ export class AuthGateService{
           reject(error);
         })
     });
+    //authConfirmUser
+}
+
+authConfirmUser(key){
+  console.log('GET URI IN AUTH_GATE LINE 256');
+  return new Promise((resolve, reject) => {
+    this.http.post(this.testUrl+'auth/authenticateConfirm', {
+      key: key
+    },{
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+ localStorage.getItem('token'))
+    })
+      .subscribe(data => {
+        if(data['success']) {
+          resolve(data);
+        };
+       
+
+      }, error => {
+        console.log(error);
+        reject(error);
+      })
+  });
+  /*this.http
+      .post(this.testUrl + 'public/authenticatekey', {key: key}, )
+      .subscribe(
+        // Successful responses call the first callback.
+        data => {
+                    
+            let token = data['token'];
+            localStorage.setItem('token', token );
+            if(data['success']) {
+              this.router.navigate(['home']);
+            }
+          console.log(data);
+        },
+        // Errors will call this callback instead:
+        err => {
+          this.push.error('key used was wrong', 'Login incorrect');
+          console.log('Something went wrong!', err);
+        }
+      );*/
 }
 }

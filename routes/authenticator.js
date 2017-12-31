@@ -2,39 +2,30 @@ const express = require('express');
 const router = express.Router();
 const auth = require('authenticator');
 const fs = require('fs');
-let path = './Authenticator/'
-
-let user = {};
-
-//saveJsonObj(106);
+let path = '../Authenticator/'
+/*
+saveJsonObj(106);
 //readJsonObj(102);
 //makeqrcode();
 //makeKeyToken();
 //TestAuth(722980);
 router.get('/', function(req, res, next) {
     console.log('This was used HAHAHAHA line 13');
-   // let keyToBeUsed = saveJsonObj(req.user.id);
+    let keyToBeUsed = saveJsonObj(req.user.id);
     console.log('This was used HAHAHAHA line 15');
-    let keyToBeUsed = makeKeyToken(req.user.id);
+
     let uriForQR = auth.generateTotpUri(keyToBeUsed, req.user.id, "ACME Co", 'SHA1', 6, 30);
     res.status(200).json({Uri: uriForQR});
 });
 
 router.post('/authenticateConfirm', function(req, res, next) {
-    console.log(user);
+    let user = readJsonObj(req.user.id);
+    
     let formattedKey = user.authtoken;
-    console.log(formattedKey);
-    console.log(req.body.key);
-    try {
-    console.log(auth.verifyToken(formattedKey, req.body.key));
-    }catch(err) {
-        console.log(err);
-    }
-  if(  auth.verifyToken(formattedKey, req.body.key) !== null) {
-      try{
-      saveJsonObj(formattedKey, req.user.id)
-      }catch(err){console.log(err);}
+
+  if(  auth.verifyToken(formattedKey, req.body.authToken) !== null) {
       res.status(200).send('token are valid!');
+
   } else {
       res.status(500).send('token invalid');
   }
@@ -44,31 +35,21 @@ router.post('/authenticateConfirm', function(req, res, next) {
 
 
 
-function saveJsonObj(key, userId) {
-  
- 
+function saveJsonObj(userId) {
+    let authToken = auth.generateKey();
+let user = {
+            userid: userId,
+            authtoken: authToken
+            };
 
-console.log(key + ' ' + 'line 45');
+console.log(authToken + ' ' + 'line 45');
 
-let savePath = path + 'authUser' + userId + '.json';
-console.log(savePath + ' line 48');
+let savePath = path + 'authUser' + user.userid + '.json';
 
-let userToWrite = {
-    userid: userId,
-    authtoken: key
-}
-
-let data = JSON.stringify(userToWrite, null, 2);
+let data = JSON.stringify(user, null, 2);
 console.log(data);
-try {
-    console.log(savePath + ' ' + 'line 58');
-    console.log(data + ' ' + 'line 59');
-    
 fs.writeFileSync(savePath, data);
-}
-catch(err) {
-    console.log(err);
-}
+
 return user.authtoken;
 
 };
@@ -100,14 +81,14 @@ function TestAuth(key) {
   }
 }
 
-function makeKeyToken(id) {
-   // let user = readJsonObj(393);
-   let authToken = auth.generateKey();
-   user = {
-    userid: id,
-    authtoken: authToken
-    };
-    return authToken;
+function makeKeyToken() {
+    let user = readJsonObj(393);
+
+   
+   let tokenkey = auth.generateToken(user.authtoken);
+   console.log(tokenkey);
+   TestAuth(tokenkey);
+
    
 }
 function makeqrcode(key){
@@ -117,4 +98,4 @@ function makeqrcode(key){
         console.log(uriForQR);
 }
 
-module.exports = router;
+module.exports = router;*/

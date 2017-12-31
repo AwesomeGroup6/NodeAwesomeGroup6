@@ -54,7 +54,6 @@ export class HomeComponent implements OnInit{
     this.posts = this.agS.getPosts();
     this.groups = this.agS.getGroups();
     this.fRQs = this.agS.getFRs();
-    this.Uri = this.agS.getUri();
   }
 
   createPost() {
@@ -112,16 +111,18 @@ export class HomeComponent implements OnInit{
     this.router.navigate(['login']);
   }
   getUri(){
-    try {
-    this.Uri = this.agS.getUri();
-    }catch(err) {
-      console.log(err)
-    }
-    console.log(this.Uri);
-    let dialogRef = this.dialog.open(QrcodeComponent, {
-      width: '500px',
-      data: this.Uri
+
+    let URI = this.agS.getUri();
+    console.log(URI);
+    URI.then(data => {
+      console.log(data);
+      let dialogRef = this.dialog.open(QrcodeComponent, {
+        width: '500px',
+        data: data
+      });
     });
+    
+    
   }
 }
 

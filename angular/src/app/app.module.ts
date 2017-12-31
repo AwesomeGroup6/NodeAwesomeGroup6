@@ -11,6 +11,7 @@ import {ToastModule, ToastOptions} from 'ng2-toastr/ng2-toastr';
 import {MatCardModule} from '@angular/material/card';
 import {MatListModule} from '@angular/material/list';
 import {MatDialogModule} from '@angular/material/dialog';
+import {NgxQRCodeModule} from 'ngx-qrcode2';
 
 //IMPORT ANGULAR-MATERIAL COMPONENTS TO USE COMPONENTS TO USE
 
@@ -63,7 +64,8 @@ export class CustomOption extends ToastOptions {
     MatListModule,
     MatInputModule,
     routing,
-    MatFormFieldModule
+    MatFormFieldModule,
+    NgxQRCodeModule
   ],
   providers: [MediaServiceService, AuthGuard, {provide: ToastOptions, useClass: CustomOption}, AuthGateService, ChatService],
   bootstrap: [AppComponent]

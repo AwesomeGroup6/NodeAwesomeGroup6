@@ -9,7 +9,6 @@ router.get('/', function(req, res, next) {
 
         let result = db.getFriends(req.user.id);
 
-        console.log("id" + req.user.id);
 
         result.then(friends => {
 

@@ -1,2 +1,20 @@
 <h5>qr auth code</h5>
-{{Uri.uriForQR}}
+<p>testing Uri</p>
+<var>Uri = data</var>
+
+      <p class="small">{{data}}</p>
+
+      <ngx-qrcode [qrc-value]="data"></ngx-qrcode>
+
+      <h2>Confirm and save</h2>
+    <form [formGroup]="authConfForm" (ngSubmit)="authenticateConfirm()" novalidate>
+      <div class="form-group">
+          <mat-form-field>
+          <input matInput type="key" class="form-control" required formControlName="key" placeholder="Key">
+            </mat-form-field>
+      </div>
+      <div class="form-group">
+        <button mat-raised-button color="primary" type="submit">Check key</button>
+      </div>
+    </form>
+
