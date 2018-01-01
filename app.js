@@ -37,21 +37,21 @@ app.use('/public', publicroutes);
 
 
 app.use(function(req, res, next){
-  if(req.headers && req.headers.authorization){
+    if(req.headers && req.headers.authorization){
 
-    let token = req.headers.authorization.split(' ')[1];
-    console.log(token);
-    
-    jwt.verify(token, secret, function(err, decode){
-      if (err) res.status(401).send({text: 'User not identified'});
-      req.user = decode;
+        let token = req.headers.authorization.split(' ')[1];
+        console.log(token);
+
+        jwt.verify(token, 'mysecretsocialsite', function(err, decode){
+            if (err) res.status(401).send({text: 'User not identified'});
+            req.user = decode;
 
 
-      next();
-    });
-  }else {
-    res.status(401).send({text: 'No token provided'});
-}
+            next();
+        });
+    }else {
+        res.status(401).send({text: 'No token provided'});
+    }
 
 });
 
@@ -62,22 +62,21 @@ app.use('/comments',comments);
 app.use('/friendshipRequest',friendshipRequest);
 
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     let err = new Error('Not Found');
     err.status = 404;
-  next(err);
+    next(err);
 });
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
+    // render the error page
+    res.status(err.status || 500);
 });
 
 module.exports = app;

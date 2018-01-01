@@ -32,6 +32,7 @@ router.post('/login', function(req, res, next) {
 
             // return the information including token as JSON
             res.status(200).json({
+                result,
                 success: true,
                 message: 'Enjoy your token!',
                 token: token
@@ -54,22 +55,22 @@ router.post('/login', function(req, res, next) {
 router.post('/signup', function(req, res,next){
 
 
-    let email = req.body.email;
-    let password = req.body.password;
-    let firstname = req.body.firstname;
-    let lastname = req.body.lastname;
+    let Email = req.body.Email;
+    let Password = req.body.Password;
+    let Firstname = req.body.FirstName;
+    let Lastname = req.body.LastName;
 
 
-    console.log(firstname);
+    console.log(Firstname);
 
-    if(!email || !password || !firstname || !lastname){
+    if(!Email || !Password || !Firstname || !Lastname){
         console.log(req.body);
         res.status(500).send({text: "you need information to send"});
        
     } else {
 
-            console.log(req.body.Email, 'this is email', req.body.Password,'this is password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
-        let dbAccount = db.addaccount(email, password, firstname, lastname);
+            console.log(req.body.Email, 'this is Email', req.body.Password,'this is Password', req.body.FirstName,'this is First Name', req.body.LastName, 'this is LastName');
+        let dbAccount = db.addaccount(Email, Password, Firstname, Lastname);
 
 
             dbAccount.then(result => {

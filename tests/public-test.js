@@ -6,6 +6,7 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 chai.use(chaiHttp);
 
+/*
 
 describe('/POST signup', () => {
     it('user should create account', (done) => {
@@ -28,6 +29,7 @@ describe('/POST signup', () => {
     });
 });
 
+*/
 
 
 
@@ -103,11 +105,6 @@ describe('/POST login', () => {
                     });
 
                 });
-
-
-
-
-
 
             });
     });

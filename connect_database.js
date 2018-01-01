@@ -1,6 +1,6 @@
 const sql = require('mssql');
 const bcrypt = require('bcrypt');
-const salt = bcrypt.genSaltSync();
+const salt = bcrypt.genSaltSync(10);
 
 let config= ({
     user: 'Lucia',
@@ -93,45 +93,38 @@ function getLogin(email, password) {
 
  // function which will save a user to the database with the used of stored procedues it will get data from frontend.
  function saveAccount(Email, Password, FirstName, LastName) {
-    try {
-    return new Promise((resolve, reject) =>
-    {
 
-      const hash =  bcrypt.hashSync(Password,salt);
+     const hash =  bcrypt.hashSync(Password,salt);
 
-      console.log(hash);
-
-
-        const pool3 = new sql.ConnectionPool(config,err => {
-
-
-                console.log('before request');
+     return new Promise((resolve, reject) =>
+        {
+            const pool3 = new sql.ConnectionPool(config,err => {
+                    console.log('before request');
 
         pool3.request()
-                .input('FirstName', sql.VarChar(50), FirstName)
-                .input('LastName', sql.VarChar(50), LastName)
-                .input('Email', sql.VarChar(50), Email)
-                .input('Password', sql.VarChar(100),hash)
-                .execute('signUpUser',(err, result) => {
+            .input('FirstName', sql.VarChar(50), FirstName)
+            .input('LastName', sql.VarChar(50), LastName)
+            .input('Email', sql.VarChar(50), Email)
+            .input('Password', sql.VarChar(100),hash)
+            .execute('signUpUser',(err, result) => {
 
-                    console.dir(result);
-                    console.log(result.rowsAffected[0]);
-                     resolve(result.rowsAffected[0]);
-                    pool3.close()
-    }).catch(err => {
-            // ... error checks
-            // console.dir(err);
-        reject(err);
-    })
+            if(err){
+                console.log(err);
+            }
+
+            resolve(result.recordset);
+             pool3.close()
 
     })
 
+
+    })
+        pool3.on('error', err => {
+            pool3.close();
+
+    })
     });
-}catch(err) {
-    console.log(err);
-        reject(err);
 
-    }
 
 
  }
@@ -176,7 +169,51 @@ function getLogin(email, password) {
 console.log(err);
 }
  }
-/*
+
+
+ function saveMessages(FromUser,ToUser,MessageContent) {
+ try {
+ return new Promise((resolve, reject) =>
+ {
+ const pool20 = new sql.ConnectionPool(config,err => {
+ console.log('before request');
+
+ pool20.request()
+ .input('FromUser', sql.VarChar(100), FromUser)
+ .input('ToUser', sql.VarChar(100), ToUser)
+     .input('MessageContent', sql.VarChar(100), MessageContent)
+
+     .execute('saveMessage',(err, result) => {
+
+ if(err){
+ console.log(err);
+ }
+
+ console.dir(result);
+ console.log(result.rowsAffected[0]);
+ resolve(result.rowsAffected[0]);
+ pool20.close();
+
+ })
+
+
+ })
+
+ pool4.on('error', err => {
+ pool4.close();
+
+ })
+
+ }).catch(err => {
+ // ... error checks
+ console.dir(err);
+ reject(err);
+ });
+ }catch(err) {
+ console.log(err);
+ }
+ }
+
 
  function getUserIdFromEmail(email) {
 
@@ -208,7 +245,7 @@ console.log(err);
       
  })
  }
-*/
+
 
 
 /*

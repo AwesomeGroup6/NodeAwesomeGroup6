@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewContainerRef, Input} from '@angular/core';
 import {AuthGateService} from "../auth-gate.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {ToastsManager} from "ng2-toastr";
@@ -6,15 +6,25 @@ import {Observable} from "rxjs/Observable";
 import {Router} from "@angular/router";
 import {MatDialog} from '@angular/material';
 import {CommentsComponent} from './comments.component';
+import {MediaServiceService} from "../login-signup";
+import {ChatService} from "../chat.service";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  entryComponents: [CommentsComponent]
+  entryComponents: [CommentsComponent],
+
 })
 export class HomeComponent implements OnInit{
   private agS;
+  private ms;
+  private chat;
+  private click = true;
+  private count = 0;
+   a;
+  private target;
+  private b=1;
 
   friends: Observable<any[]>;
   posts: Observable<any[]>;
@@ -23,8 +33,13 @@ export class HomeComponent implements OnInit{
   fRQs: Observable<any>;
   findGs: Observable<any>;
   currentComments: Observable<any>;
+  currentUser: Observable<any>;
 
-  constructor(agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router, public dialog: MatDialog) {
+
+
+  constructor(chat: ChatService,ms : MediaServiceService,agService: AuthGateService, public toastr: ToastsManager, vcr: ViewContainerRef, private router: Router, public dialog: MatDialog) {
+    this.ms = ms;
+    this.chat = chat;
     this.agS = agService;
     this.toastr.setRootViewContainerRef(vcr);
 
@@ -48,16 +63,14 @@ export class HomeComponent implements OnInit{
 
   ngOnInit() {
     this.currFriends = this.agS.getFriends();
-    setTimeout(() => {
     this.posts = this.agS.getPosts();
-    }, 1000);
-    setTimeout(() => {
     this.groups = this.agS.getGroups();
-    }, 2000);
-    setTimeout(() => {
-      this.fRQs = this.agS.getFRs();
-    }, 3000);
-  }
+    this.fRQs = this.agS.getFRs();
+    this.currentUser = this.ms.currentUser;
+
+
+  };
+
 
   createPost() {
     if(this.postForm.controls.content.value){
@@ -113,10 +126,34 @@ export class HomeComponent implements OnInit{
       console.log('The dialog was closed');
     });
   }
+
   logout(){
     localStorage.clear();
     this.router.navigate(['login']);
-  }
+  };
+
+  talk(userName){
+
+    this.a = userName;
+
+
+
+    console.log(this.a);
+
+
+    if(this.count<1) {
+      this.click = false;
+      this.chat.addUser(this.ms.currentUser.FirstName);
+      this.count++;
+    }
+    else{
+      this.click = true;
+      this.count = 0;
+    }
+  };
+
+
+
 }
 
 

@@ -4,16 +4,28 @@
       <h6>Friends</h6>
       <hr>
       <mat-list *ngFor="let friend of currFriends | async; let i=index">
-        <mat-list-item>{{friend.FirstName}} {{friend.LastName}} </mat-list-item>
+
+        <mat-list-item>{{friend.FirstName}} {{friend.LastName}} {{friend.UserId}}
+
+          <button mat-raised-button type="button" (click)="talk(friend.FirstName)">Chat!
+
+
+          </button>
+
+        </mat-list-item>
         <hr>
       </mat-list>
-    </mat-card>
 
 
-    <mat-card style="margin-top: 5px">
-    <h6>Chat</h6>
-      <app-chat></app-chat>
     </mat-card>
+    <div [hidden]="click">
+      <mat-card style="margin-top: 5px" >
+        <h6>Chat</h6>
+        <app-chat></app-chat>
+      </mat-card >
+    </div>
+
+
 
     <mat-card style="margin-top: 5px">
       <h6>Friend Requests</h6>
@@ -98,6 +110,10 @@
   <div class="col-6 col-md-4">
     <mat-card>
       <h5>Profile</h5>
+        <h6>First name: {{currentUser.FirstName}}</h6>
+        <h6>Last  name: {{currentUser.LastName}}</h6>
+        <h6>Email: {{currentUser.Email}}</h6>
+
       <button mat-raised-button type="button" (click)="logout()">Logout</button>
     </mat-card>
 
@@ -139,6 +155,5 @@
         <hr>
       </mat-list>
     </mat-card>
-
   </div>
 </div>

@@ -1,8 +1,10 @@
 ///<reference path="../../../node_modules/@angular/core/src/metadata/lifecycle_hooks.d.ts"/>
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewContainerRef, Output, Input} from '@angular/core';
 import {MediaServiceService} from "../login-signup";
 import {FormControl, FormGroup} from "@angular/forms";
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import {Observable} from "rxjs";
+import {ChatService} from "../chat.service";
 
 @Component({
   selector: 'app-login',
@@ -14,9 +16,12 @@ import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 export class LoginComponent {
 
   MService;
+  user: Observable<any>;
+  chat;
 
 
-  constructor( ms : MediaServiceService, public toastr: ToastsManager, vcr: ViewContainerRef) {
+    constructor(chat:ChatService, ms : MediaServiceService, public toastr: ToastsManager, vcr: ViewContainerRef) {
+    this.chat = chat;
     this.MService = ms;
     this.toastr.setRootViewContainerRef(vcr);
   }
@@ -28,10 +33,17 @@ export class LoginComponent {
 
 
   login () {
-    if (this.loginForm.controls.email.value || this.loginForm.controls.password.value) {
-    this.MService.logUserIn(this.loginForm.controls.email.value, this.loginForm.controls.password.value);
-  } else {
-      this.toastr.error('Fill all the fields');
-    }
-  }
-}
+
+      if (this.loginForm.controls.email.value || this.loginForm.controls.password.value) {
+
+        this.user = this.MService.logUserIn(this.loginForm.controls.email.value, this.loginForm.controls.password.value);
+
+      }
+
+
+      else {
+        this.toastr.error('Fill all the fields');
+      }
+
+
+}}

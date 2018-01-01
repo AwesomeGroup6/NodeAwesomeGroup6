@@ -21,10 +21,11 @@ export class AuthGateService{
   fGs: Observable<any>;
   currComments: Observable<any>;
 
+
   constructor(private http: HttpClient, private push: ToastsManager, private router: Router) {}
 
 
- // TODO all request in here
+
 
   getFriends(){
     return new Promise((resolve, reject) =>{
@@ -41,7 +42,6 @@ export class AuthGateService{
         reject(error)
       })
     })
-
   }
 
   getPosts(){
